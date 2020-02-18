@@ -3,16 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>second lesson</title>
+    <title>third lesson</title>
 </head>
 <body>
-    <h1>Hello, Konstantin! :)</h1>
+    
     <script>
-        let myName = "Mariya Kyrychenko";
-        let myAge = 38;
-        let greeting = "Glad to see you again ;)";
-        let summary;
-        summary = "I'm " + myName + " " + myAge + " years old \n" + greeting;
+        "use strict"
+        let userName = prompt("Ваше имя", '');
+        let userAge = prompt("Ваш возраст",'');
+        let isAlcohol = confirm("Алкоголь употребляем?");
+        let summary = userName + "! ";
+        
+        if(!userName || !userAge){ 
+            summary = "Недостаточно инфо!!! Cпробуйте ще раз!";
+        } else if (isAlcohol) {
+            if(userAge > 40) {
+                summary += "Не злоупотребляйте";
+            } else if (userAge < 18) {
+                summary += "Ты что?! Маме расскажу!";
+            } else {
+                summary += "Только водку с пивом не мешай...";
+            }
+        } else {
+            summary += "Так держать!";
+        }
+        
         alert(summary);
     </script>
 </body>
