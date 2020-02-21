@@ -3,32 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>third lesson</title>
+    <title>triangle</title>
 </head>
 <body>
     
     <script>
         "use strict"
-        let userName = prompt("Ваше имя", '');
-        let userAge = prompt("Ваш возраст",'');
-        let isAlcohol = confirm("Алкоголь употребляем?");
-        let summary = userName + "! ";
-        
-        if(!userName || !userAge){ 
-            summary = "Недостаточно инфо!!! Cпробуйте ще раз!";
-        } else if (isAlcohol) {
-            if(userAge > 40) {
-                summary += "Не злоупотребляйте";
-            } else if (userAge < 18) {
-                summary += "Ты что?! Маме расскажу!";
-            } else {
-                summary += "Только водку с пивом не мешай...";
-            }
+
+        let height = Number(prompt('Введите высоту треугольника: ', ''));
+        let triangle = '';
+        let line = '';
+
+        if(!height || !(height % 2 === 0 || height % 1 === 0) || height < 0){
+            alert('Введите целое положительное число больше 0!')
         } else {
-            summary += "Так держать!";
+            for(let i = 1; i <= height; i++){
+                line += '*';
+                triangle += line + '\n';
+            }
         }
         
-        alert(summary);
+        console.log(triangle);
+        
     </script>
 </body>
 </html>
