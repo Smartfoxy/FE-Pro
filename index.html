@@ -10,19 +10,19 @@
     <script>
         "use strict"
 
-       function circleSquare(radius) {
+       function getCircleSquare(radius) {
            return Math.PI * Math.pow(radius, 2);
        }
 
-       function circumference(radius) {
+       function getCircumference(radius) {
            return 2 * Math.PI * radius;
        }
 
-       function average(num1, num2) {
+       function getAverage(num1, num2) {
            return (num1 + num2) / 2;
        }
 
-       function calculator(num1, num2, oper){
+       function calc(num1, num2, oper){
            let res; 
 
            if(!(+num1) || !(+num2)) {
