@@ -3,28 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>triangle</title>
+    <title>functions</title>
 </head>
 <body>
     
     <script>
         "use strict"
 
-        let height = Number(prompt('Введите высоту треугольника: ', ''));
-        let triangle = '';
-        let line = '';
+       function circleSquare(radius) {
+           return Math.PI * Math.pow(radius, 2);
+       }
 
-        if(!height || !(height % 2 === 0 || height % 1 === 0) || height < 0){
-            alert('Введите целое положительное число!')
-        } else {
-            for(let i = 1; i <= height; i++){
-                line += '*';
-                triangle += line + '\n';
-            }
-        }
-        
-        console.log(triangle);
-        
+       function circumference(radius) {
+           return 2 * Math.PI * radius;
+       }
+
+       function average(num1, num2) {
+           return (num1 + num2) / 2;
+       }
+
+       function calculator(num1, num2, oper){
+           let res; 
+
+           if(!(+num1) || !(+num2)) {
+               res = 'Вы ввели не числа! попробуйте еще раз!'
+           } else {
+                switch (oper) {
+                case '+':
+                        res = num1 + num2;
+                        break;
+                case '-':
+                        res = num1 - num2;
+                        break;
+                case '*':
+                        res = num1 * num2;
+                        break; 
+                case '/':
+                        res = num1 / num2;
+                        break; 
+                    default:
+                        res = 'Наш калькулятор не знает такой оператор';             
+                }
+           }
+           
+           return res;
+       }
+
     </script>
 </body>
 </html>
