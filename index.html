@@ -1,54 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>functions</title>
+    <title>homework_6</title>
 </head>
+
 <body>
-    
+
     <script>
         "use strict"
 
-       function getCircleSquare(radius) {
-           return Math.PI * Math.pow(radius, 2);
-       }
+        let student1 = {
+            name: 'Vasya',
+            gender: 'male',
+            year: 1999
+        };
+        let student2 = {
+            name: 'Petya',
+            gender: 'male',
+            year: 1995
+        };
+        let student3 = {
+            name: 'Nata',
+            gender: 'female',
+            year: 2000
+        };
+        let student4 = {
+            name: 'Lesya',
+            gender: 'female',
+            year: 1992
+        };
+        let student5 = {
+            name: 'Katya',
+            gender: 'female',
+            year: 2000
+        };
+        let student6 = {
+            name: 'Olya',
+            gender: 'female',
+            year: 1997
+        };
+        let i = 1;
 
-       function getCircumference(radius) {
-           return 2 * Math.PI * radius;
-       }
+        let students = [eval('student' + i)];
 
-       function getAverage(num1, num2) {
-           return (num1 + num2) / 2;
-       }
+        console.log(students);
 
-       function calc(num1, num2, oper){
-           let res; 
+        function clone(arr) {
+            let arrClone = [];
+            for (let i = 0; i < arr.length; i++) {
+                arrClone[i] = arr[i];
+            }
+            return arrClone;
+        }
+        /*let arr = [1,2,3,4,5,6];
 
-           if(!(+num1) || !(+num2)) {
-               res = 'Вы ввели не числа! попробуйте еще раз!'
-           } else {
-                switch (oper) {
-                case '+':
-                        res = num1 + num2;
-                        break;
-                case '-':
-                        res = num1 - num2;
-                        break;
-                case '*':
-                        res = num1 * num2;
-                        break; 
-                case '/':
-                        res = num1 / num2;
-                        break; 
-                    default:
-                        res = 'Наш калькулятор не знает такой оператор';             
+let brr = clone(arr);
+
+console.log(brr); // [1,2,3,4,5,6]
+
+brr[0] = 42;
+
+console.log(brr); // [42,2,3,4,5,6]
+
+console.log(arr);*/
+
+        function filter(arr, isBig) {
+            let arrResult = [];
+            for (let i = 0; i < arr.length; i++) {
+                if (isBig(arr[i])) {
+                    arrResult.push(arr[i]);
                 }
-           }
-           
-           return res;
-       }
+            }
+            return arrResult;
+        }
+
+        function isBig(num) {
+            return num > 100;
+        }
+
+        /*let arr = [1, 30, 1000, 850, 0, 250];
+        console.log(arr);
+        console.log(filter(arr, isBig));*/
+
+
+
 
     </script>
 </body>
+
 </html>
