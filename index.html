@@ -24,12 +24,12 @@
         };
         let student3 = {
             name: 'Nata',
-            gender: 'female',
+            gender: 'male',
             year: 2000
         };
         let student4 = {
             name: 'Lesya',
-            gender: 'female',
+            gender: 'male',
             year: 1992
         };
         let student5 = {
@@ -42,12 +42,37 @@
             gender: 'female',
             year: 1997
         };
-        let i = 1;
 
-        let students = [eval('student' + i)];
+        let students = [];
+        for(let i = 1; i <=6; i++) {
+            students.push(eval('student' + i));
+        }
 
-        console.log(students);
+        function getAverageAge(students) {
+            let now = new Date();
+            let totalAge = 0;
+            for(let i = 0; i < students.length; i++) {
+                totalAge += (now.getFullYear()-students[i].year);
+            }
+            return Math.round(totalAge / students.length);
+        }
 
+        function checkMostGender(students) {
+            let male = 0;
+            let female = 0;
+            for(let i = 0; i < students.length; i++){
+                students[i].gender === 'male' ? male++ : female++;
+            }
+            if(male > female){
+                return 'male';
+            } else if(female > male){
+                return 'female';
+            } else {
+                return 'equal';
+            }
+        }
+
+        
         function clone(arr) {
             let arrClone = [];
             for (let i = 0; i < arr.length; i++) {
@@ -55,17 +80,6 @@
             }
             return arrClone;
         }
-        /*let arr = [1,2,3,4,5,6];
-
-let brr = clone(arr);
-
-console.log(brr); // [1,2,3,4,5,6]
-
-brr[0] = 42;
-
-console.log(brr); // [42,2,3,4,5,6]
-
-console.log(arr);*/
 
         function filter(arr, isBig) {
             let arrResult = [];
@@ -80,13 +94,6 @@ console.log(arr);*/
         function isBig(num) {
             return num > 100;
         }
-
-        /*let arr = [1, 30, 1000, 850, 0, 250];
-        console.log(arr);
-        console.log(filter(arr, isBig));*/
-
-
-
 
     </script>
 </body>
