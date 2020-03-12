@@ -12,6 +12,28 @@
     <script>
         "use strict"
 
+        let origin = {
+            form: 'circle',
+            color: 'red',
+            background: 'green',
+            border: 'solid'
+        };
+        let target = {};
+        
+        function copy(target, origin) {
+            for(let prop in origin) {
+                target[prop] = origin[prop];
+            }
+            return target;
+        }
+        
+        copy(target, origin);
+        console.log(target);
+        target.form = 'triangle';
+        console.log(target);
+        console.log(origin);
+
+
         function getNumberOfEven(n) {
             let count = 0;
             while(n > 0) {
@@ -42,27 +64,33 @@
             }
             return sum;
         }
+        console.log(sumAll(2,3,4));
 
         function mathMinMax() {
             let result = [];
             if(arguments.length !==0){
-                let min = arguments[0];
-                let max = arguments[0];
-                for(let i = 1; i < arguments.length; i++){
-                    if(arguments[i] > max){
-                        max = arguments[i];
+                if(arguments.length === 1){
+                    result[0] = arguments[0];
+                } else {
+                    let min = arguments[0];
+                    let max = arguments[0];
+                    for(let i = 1; i < arguments.length; i++){
+                        if(arguments[i] > max){
+                            max = arguments[i];
+                        }
+                        if(arguments[i] < min){
+                            min = arguments[i];
+                        }
                     }
-                    if(arguments[i] < min){
-                        min = arguments[i];
-                    }
+                    result[0] = min;
+                    result[1] = max;
                 }
-                result[0] = min;
-                result[1] = max;
             }
             return result;            
         }
-        console.log(sumAll(2,3,4));
         console.log(mathMinMax(20,3,4,10,1));
+        console.log(mathMinMax(20));
+        console.log(mathMinMax());
 
     </script>
 </body>
