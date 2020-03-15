@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>homework_7</title>
+    <title>homework_8</title>
 </head>
 
 <body>
@@ -12,85 +12,90 @@
     <script>
         "use strict"
 
-        let origin = {
-            form: 'circle',
-            color: 'red',
-            background: 'green',
-            border: 'solid'
-        };
-        let target = {};
-        
-        function copy(target, origin) {
-            for(let prop in origin) {
-                target[prop] = origin[prop];
-            }
-            return target;
+        const arr = [-246, 753, -468, 475, -683, 476, -583, 746, -581];
+        function cloneArr(arr) {
+            let arrClone = arr.map(function(item) {
+            return item;
+            });
+            return arrClone; 
         }
         
-        copy(target, origin);
-        console.log(target);
-        target.form = 'triangle';
-        console.log(target);
-        console.log(origin);
+        
+        let sum = 0;
+        arr.forEach(function(item) {
+            sum += item;
+        });
+        console.log(sum);
 
 
-        function getNumberOfEven(n) {
-            let count = 0;
-            while(n > 0) {
-                let num = n % 10;
-                if(num % 2 === 0){
-                    count++;
-                }
-                n = Math.floor(n/10); 
-            }
-            return count;
+        let neg_arr = arr.filter(function(item) {
+            return item < 0;
+        });
+        console.log(neg_arr);
+        console.log(arr);
+
+        let reverse = cloneArr(arr).reverse();
+        console.log(reverse);
+        console.log(arr);
+
+
+        let arrHalf = arr.map(function(item) {
+            return item / 2;
+        });
+        console.log(arrHalf);
+        console.log(arr);
+
+        let sortArr = cloneArr(arr).sort(function(a,b){
+            return a - b;
+        });
+        console.log(sortArr);
+        console.log(arr);
+       
+
+                    /*task № 2*/
+
+        const str = "12, 42, 63, 56, 122, 17, 117, 25, 645, 722, 964";
+
+        let strToArrNum = str.split(',').map(function(item) {
+            return Number(item);
+        });
+        console.log(strToArrNum);
+
+
+        let arrEven = strToArrNum.filter(isEven);
+        console.log(arrEven);
+
+        function isEven(num) {
+            return num % 2 === 0;
         }
 
-        function getNumberOfEven2(n) {
-            let numToChars = String(n).split('');
-            let count = 0;
-            for(let i = 0; i < numToChars.length; i++){
-                if(+numToChars[i] % 2 === 0) count++;
-            }
-            return count;
-        }
-        console.log(getNumberOfEven(1256809));
-        console.log(getNumberOfEven2(1256809));
+                     /*task № 3*/
 
-        function sumAll(){
-            let sum = 0;
-            for(let i = 0; i < arguments.length; i++){
-                sum += arguments[i];
-            }
-            return sum;
+        function makeObjectFromScheme(arr) {
+            let object = {};
+            arr.forEach(function(item) {
+                object[item[0]] = item[1];
+            })
+            return object;
         }
-        console.log(sumAll(2,3,4));
+        const scheme = [
+            ['name', 'Vasya'],
+            ['age', 25],
+            ['score', 95]
+        ];
+        console.log(makeObjectFromScheme(scheme));
 
-        function mathMinMax() {
-            let result = [];
-            if(arguments.length !==0){
-                if(arguments.length === 1){
-                    result[0] = arguments[0];
-                } else {
-                    let min = arguments[0];
-                    let max = arguments[0];
-                    for(let i = 1; i < arguments.length; i++){
-                        if(arguments[i] > max){
-                            max = arguments[i];
-                        }
-                        if(arguments[i] < min){
-                            min = arguments[i];
-                        }
-                    }
-                    result[0] = min;
-                    result[1] = max;
-                }
-            }
-            return result;            
+                    /*task № 4*/
+
+        function createArrayFromObject(object) {
+            let arr = [];
+            for(let prop in object) {
+                arr.push([prop, object[prop]]);
+            }          
+            return arr;
         }
-        console.log(mathMinMax(20,3,4,10,1));
-        console.log(mathMinMax(20));
-        console.log(mathMinMax());
+        console.log(createArrayFromObject(makeObjectFromScheme(scheme)));
+
 
     </script>
 </body>
