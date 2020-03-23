@@ -12,95 +12,73 @@
     <script>
         "use strict"
 
-        const arr = [-246, 753, -468, 475, -683, 476, -583, 746, -581];
-        function cloneArr(arr) {
-            let arrClone = arr.map(function(item) {
-            return item;
+        let keys = [
+
+        ['value', 42, true, false, false],
+
+        ['value2', true, false, false, false],
+
+        ['value3', 'Hello', true, true, true]
+
+        ];
+       
+        function createObject(keys) {
+            let obj = {};
+            keys.forEach(function(el){
+                Object.defineProperty(obj, el[0], {
+                    value: el[1],
+                    enumerable: el[2],
+                    writable: el[3],
+                    configurable: el[4]
+                });
             });
-            return arrClone; 
+
+            return obj;
         }
+        console.log(createObject(keys)); /*почему порядок свойств меняется?*/
+        let descriptor = Object.getOwnPropertyDescriptor(createObject(keys), 'value');
+        console.log( JSON.stringify(descriptor, null, 2 ) );
+
+
+
+        let obj1 = {
+            value: 42,
+            value2: true
+        }
+
+        let obj2 = {
+            value: 42,
+            value2: true,
+        }
+             /*если не заморачиваться*/
+        function compareObj(obj1, obj2) {
+            return JSON.stringify(obj1) === JSON.stringify(obj2);
+        }
+
+              /*если  заморочиться*/
+        function compareObj2(obj1, obj2) {
+            if(Object.keys(obj1).length !== Object.keys(obj2).length) {
+                return false;
+            } else {
+                for (let prop in obj1) {
+                    if(!obj2.hasOwnProperty(prop) || obj1[prop]!==obj2[prop]) {
+                        return false;
+                    }
+                } 
+                return true;   
+            }           
+        }
+
+        console.log(compareObj(obj1, obj2));
+        console.log(compareObj2(obj1, obj2));
+
         
-        
-        let sum = 0;
-        arr.forEach(function(item) {
-            sum += item;
-        });
-        console.log(sum);/*reduce*/
+        /*почему 2 строки ниже дают один результат? getOwnPropertyNames вроде должен включать и неперечисляемые свойства?*/
+        console.log(Object.keys(obj1).length);
+        console.log(Object.getOwnPropertyNames(obj1).length);
 
-
-        let neg_arr = arr.filter(function(item) {
-            return item < 0;
-        });
-        console.log(neg_arr);
-        console.log(arr);
-
-        let reverse = cloneArr(arr).reverse();
-        console.log(reverse);
-        console.log(arr);
-
-
-        let arrHalf = arr.map(function(item) {
-            return item / 2;
-        });
-        console.log(arrHalf);
-        console.log(arr);
-
-        let sortArr = cloneArr(arr).sort(function(a,b){
-            return a - b;
-        });
-        console.log(sortArr);
-        console.log(arr);
        
 
-                    /*task № 2*/
-
-        const str = "12, 42, 63, 56, 122, 17, 117, 25, 645, 722, 964";
-
-        let strToArrNum = str.split(',').map(function(item) {
-            return Number(item);
-        });
-        console.log(strToArrNum);
-
-
-        let arrEven = strToArrNum.filter(isEven);
-        console.log(arrEven);
-
-        function isEven(num) {
-            return num % 2 === 0;
-        }
-
-                     /*task № 3*/
-
-       function makeObjectFromScheme(arr) {
-            let object = {};
-            arr.forEach(function(item) {
-                object[item[0]] = item[1];
-            })
-            return object;
-        }
-        const scheme = [
-            ['name', 'Vasya'],
-            ['age', 25],
-            ['score', 95]
-        ];
-        console.log(makeObjectFromScheme(scheme));
-
-                    /*task № 4*/
-
-        function createArrayFromObject(object) {
-            let arr = [];
-            for(let prop in object) {
-                arr.push([prop, object[prop]]);
-            }          
-            return arr;
-        }
-        console.log(createArrayFromObject(makeObjectFromScheme(scheme)));
-
-        
-
-        
-
-        
 
 
     </script>
