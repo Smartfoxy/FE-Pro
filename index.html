@@ -13,19 +13,18 @@
         "use strict"
 
         const arr = [-246, 753, -468, 475, -683, 476, -583, 746, -581];
-        function cloneArr(arr) {
+       /* function cloneArr(arr) {
             let arrClone = arr.map(function(item) {
             return item;
             });
             return arrClone; 
-        }
+        }*/
         
         
-        let sum = 0;
-        arr.forEach(function(item) {
-            sum += item;
+        let sum = arr.reduce(function(acc, current) {
+           return acc += current;
         });
-        console.log(sum);/*reduce*/
+        console.log(sum);
 
 
         let neg_arr = arr.filter(function(item) {
@@ -34,7 +33,7 @@
         console.log(neg_arr);
         console.log(arr);
 
-        let reverse = cloneArr(arr).reverse();
+        let reverse = arr.slice(0).reverse();
         console.log(reverse);
         console.log(arr);
 
@@ -45,7 +44,7 @@
         console.log(arrHalf);
         console.log(arr);
 
-        let sortArr = cloneArr(arr).sort(function(a,b){
+        let sortArr = arr.slice(0).sort(function(a,b){
             return a - b;
         });
         console.log(sortArr);
