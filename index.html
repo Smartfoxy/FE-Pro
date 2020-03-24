@@ -69,8 +69,17 @@
             }           
         }
 
+        function compareObj3(obj1, obj2) {
+            let keys1 = Object.keys(obj1);
+            let keys2 = Object.keys(obj2);
+            return (keys1.length === keys2.length) && keys1.every(function(el ){
+                return obj1[el] === obj2[el];
+            });            
+        }
+
         console.log(compareObj(obj1, obj2));
         console.log(compareObj2(obj1, obj2));
+        console.log(compareObj3(obj1, obj2));
 
         
         /*почему 2 строки ниже дают один результат? getOwnPropertyNames вроде должен включать и неперечисляемые свойства?*/
