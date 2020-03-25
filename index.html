@@ -40,7 +40,7 @@
         
         $container.after(fillTable(createTable(10, 10)));
 
-        $container.after(createTable2(10, 10));
+        $container.after(fillTable(createTable2(10, 10)));
 
         document.querySelector('table').style.borderCollapse = 'collapse'; 
         for(let el of document.querySelectorAll('td')) {
@@ -76,9 +76,10 @@
         function createTable2(row, col) {
             let $table = document.createElement('table');
             for(let i = 1; i <= row; i++){
-                let $row = $table.append(document.createElement('tr'));
+                let $row = document.createElement('tr');
+                $table.append($row);
                 for(let j = 1; j <= col; j++) {
-                   /* $row.append(document.createElement('td'));*/
+                   $row.append(document.createElement('td'));
                 }
             }
             
