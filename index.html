@@ -4,104 +4,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>homework_8</title>
+    <title>DOM</title>
 </head>
 
 <body>
 
+    <div class="container"></div>
+
     <script>
         "use strict"
+        
+        let array = [1, 2, 3];
+        let array2 = [1,2, [1.1,1.2,1.3] ,3];
+        let array3 = [1,2, [1.1,[2.1, 2.2],1.2,1.3] ,3];
 
-        const arr = [-246, 753, -468, 475, -683, 476, -583, 746, -581];
-       /* function cloneArr(arr) {
-            let arrClone = arr.map(function(item) {
-            return item;
+        const $container = document.querySelector('.container'); 
+
+        $container.append(generateList(array));        
+        $container.append(generateList(array2)); 
+        $container.append(generateList(array3)); 
+
+        function generateList(arr) {
+            let $list = document.createElement('ul');
+            let listItems = '';
+            arr.forEach(function(el) {
+                if(Array.isArray(el)){
+                    el = generateList(el).outerHTML;
+                }
+                listItems += `<li>${el}</li>`                
             });
-            return arrClone; 
-        }*/
-        
-        
-        let sum = arr.reduce(function(acc, current) {
-           return acc += current;
-        });
-        console.log(sum);
-
-
-        let neg_arr = arr.filter(function(item) {
-            return item < 0;
-        });
-        console.log(neg_arr);
-        console.log(arr);
-
-        let reverse = arr.slice(0).reverse();
-        console.log(reverse);
-        console.log(arr);
-
-
-        let arrHalf = arr.map(function(item) {
-            return item / 2;
-        });
-        console.log(arrHalf);
-        console.log(arr);
-
-        let sortArr = arr.slice(0).sort(function(a,b){
-            return a - b;
-        });
-        console.log(sortArr);
-        console.log(arr);
-       
-
-                    /*task № 2*/
-
-        const str = "12, 42, 63, 56, 122, 17, 117, 25, 645, 722, 964";
-
-        let strToArrNum = str.split(',').map(function(item) {
-            return Number(item);
-        });
-        console.log(strToArrNum);
-
-
-        let arrEven = strToArrNum.filter(isEven);
-        console.log(arrEven);
-
-        function isEven(num) {
-            return num % 2 === 0;
+            $list.innerHTML = listItems;
+            return $list;
         }
 
-                     /*task № 3*/
+        
+        $container.after(fillTable(createTable(10, 10)));
 
-       function makeObjectFromScheme(arr) {
-            let object = {};
-            arr.forEach(function(item) {
-                object[item[0]] = item[1];
-            })
-            return object;
+        $container.after(createTable2(10, 10));
+
+        document.querySelector('table').style.borderCollapse = 'collapse'; 
+        for(let el of document.querySelectorAll('td')) {
+            el.style = 'border : 1px solid blue; padding: 3px; text-align: center; border-collapse: collapse;';
+        } 
+        
+        function createTable(row, col) {
+            let $table = document.createElement('table');
+            let tableInner = '';
+            let num = 1;
+            for(let i = 1; i <= row; i++){
+                let row = '<tr>';
+                for(let j = 1; j <= col; j++) {
+                    row += `<td></td>`; /*`<td>${num++}</td>`;*/
+                }
+                row +='</tr>';
+                tableInner += row;
+            } 
+            $table.innerHTML = tableInner; 
+            return $table;
         }
-        const scheme = [
-            ['name', 'Vasya'],
-            ['age', 25],
-            ['score', 95]
-        ];
-        console.log(makeObjectFromScheme(scheme));
 
-                    /*task № 4*/
-
-        function createArrayFromObject(object) {
-            let arr = [];
-            for(let prop in object) {
-                arr.push([prop, object[prop]]);
-            }          
-            return arr;
+        function fillTable($table) {
+           let num = 1;
+           for(let tr of $table.rows) {
+               for(let td of tr.cells) {
+                   td.innerHTML = num++;
+               }
+           }
+           return $table;
         }
-        console.log(createArrayFromObject(makeObjectFromScheme(scheme)));
+
+        function createTable2(row, col) {
+            let $table = document.createElement('table');
+            for(let i = 1; i <= row; i++){
+                let $row = $table.append(document.createElement('tr'));
+                for(let j = 1; j <= col; j++) {
+                   /* $row.append(document.createElement('td'));*/
+                }
+            }
+            
+            return $table;   
+        }
+
+
+
+
 
         
 
         
-
-        
-
-
     </script>
 </body>
 
