@@ -42,15 +42,16 @@
 
         $container.after(fillTable(createTable2(10, 10)));
 
-        document.querySelector('table').style.borderCollapse = 'collapse'; 
+        for(let el of document.querySelectorAll('table')) {
+            el.style = 'border-collapse: collapse; margin: 10px;'; 
+        }
         for(let el of document.querySelectorAll('td')) {
-            el.style = 'border : 1px solid blue; padding: 3px; text-align: center; border-collapse: collapse;';
+            el.style = 'border : 1px solid blue; padding: 3px; text-align: center;';
         } 
         
         function createTable(row, col) {
             let $table = document.createElement('table');
             let tableInner = '';
-            let num = 1;
             for(let i = 1; i <= row; i++){
                 let row = '<tr>';
                 for(let j = 1; j <= col; j++) {
@@ -63,16 +64,6 @@
             return $table;
         }
 
-        function fillTable($table) {
-           let num = 1;
-           for(let tr of $table.rows) {
-               for(let td of tr.cells) {
-                   td.innerHTML = num++;
-               }
-           }
-           return $table;
-        }
-
         function createTable2(row, col) {
             let $table = document.createElement('table');
             for(let i = 1; i <= row; i++){
@@ -82,8 +73,17 @@
                    $row.append(document.createElement('td'));
                 }
             }
-            
             return $table;   
+        }
+
+        function fillTable($table) {
+           let num = 1;
+           for(let tr of $table.rows) {
+               for(let td of tr.cells) {
+                   td.innerHTML = num++;
+               }
+           }
+           return $table;
         }
 
 
