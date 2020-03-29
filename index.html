@@ -5,90 +5,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DOM</title>
+
+    <style>
+        .square-blue {
+            background: blue;
+        }
+        .square-green {
+            background: green;
+        }
+        .square-yellow {
+            background: yellow;
+        }
+    
+    </style>
 </head>
 
 <body>
 
     <div class="container"></div>
 
+    <div class="box shadow radius"></div>
+
     <script>
         "use strict"
+
+        let $container = document.querySelector('.container');
         
-        let array = [1, 2, 3];
-        let array2 = [1,2, [1.1,1.2,1.3] ,3];
-        let array3 = [1,2, [1.1,[2.1, 2.2],1.2,1.3] ,3];
+        $container.innerHTML = createSquares(5);       
 
-        const $container = document.querySelector('.container'); 
+        let squares = document.querySelectorAll('.square'); 
 
-        $container.append(generateList(array));        
-        $container.append(generateList(array2)); 
-        $container.append(generateList(array3)); 
+        squares.forEach(function(el) {
+            el.addEventListener("click", changeColorOfSquare);
+            el.addEventListener("click", function() {
+                $container.append(this);
+            })
+        });
 
-        function generateList(arr) {
-            let $list = document.createElement('ul');
-            let listItems = '';
-            arr.forEach(function(el) {
-                if(Array.isArray(el)){
-                    el = generateList(el).outerHTML;
-                }
-                listItems += `<li>${el}</li>`                
-            });
-            $list.innerHTML = listItems;
-            return $list;
-        }
-
-        
-        $container.after(fillTable(createTable(10, 10)));
-
-        $container.after(fillTable(createTable2(10, 10)));
-
-        for(let el of document.querySelectorAll('table')) {
-            el.style = 'border-collapse: collapse; margin: 10px;'; 
-        }
-        for(let el of document.querySelectorAll('td')) {
-            el.style = 'border : 1px solid blue; padding: 3px; text-align: center;';
-        } 
-        
-        function createTable(row, col) {
-            let $table = document.createElement('table');
-            let tableInner = '';
-            for(let i = 1; i <= row; i++){
-                let row = '<tr>';
-                for(let j = 1; j <= col; j++) {
-                    row += `<td></td>`; /*`<td>${num++}</td>`;*/
-                }
-                row +='</tr>';
-                tableInner += row;
-            } 
-            $table.innerHTML = tableInner; 
-            return $table;
-        }
-
-        function createTable2(row, col) {
-            let $table = document.createElement('table');
-            for(let i = 1; i <= row; i++){
-                let $row = document.createElement('tr');
-                $table.append($row);
-                for(let j = 1; j <= col; j++) {
-                   $row.append(document.createElement('td'));
-                }
+        function createSquares(num) {
+            let style = "width: 50px; height: 50px; text-align: center; line-height:50px; border: 1px solid black; float: left; margin-right: 20px;"
+            let inner = '';
+            for(let i = 1; i <= 5; i++) {
+                inner += `<div class = "square" style = "${style}">${i}</div>`;
             }
-            return $table;   
+            return inner;
+        } 
+
+        function changeColorOfSquare(event) {
+            if(event.target.classList.contains('square-blue')){  /*правильно ли здесь указывать this? не до конца понимаю как оно срабатывает??очень похоже на случайность)))*/
+                this.classList.remove('square-blue');
+                this.classList.add('square-green');
+            } else if(this.classList.contains('square-green')){
+                this.classList.remove('square-green');
+                this.classList.add('square-yellow');
+            }else if(this.classList.contains('square-yellow')){
+                this.classList.remove('square-yellow');
+                this.classList.add('square-blue');
+            } else {
+                this.classList.add('square-blue');
+            }
         }
 
-        function fillTable($table) {
-           let num = 1;
-           for(let tr of $table.rows) {
-               for(let td of tr.cells) {
-                   td.innerHTML = num++;
-               }
-           }
-           return $table;
+
+
+        const $task_2 = document.querySelector('.box');
+
+        toggleClass($task_2, 'border');
+        console.log($task_2.className);
+
+        toggleClass($task_2, 'border');
+        console.log($task_2.className);
+        
+
+        function toggleClass(elem, cl){ 
+            let classList = elem.className.split(' ');
+            let index = classList.indexOf(cl);
+            if(index >= 0){
+                classList.splice(index, 1);
+            }else {
+                classList.push(cl);
+            }
+            elem.className = classList.join(' ');
         }
-
-
-
-
 
         
 
