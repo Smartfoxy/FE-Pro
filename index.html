@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>forma</title>
+    <title>canvas</title>
     <style>
         canvas {
             border: 1px solid blue;
@@ -16,70 +16,178 @@
 
 <body>
 
-     <canvas id="canvas" width="600" height="600"></canvas>
+     <canvas id="canvas" width="600" height="800"></canvas>
+     <script src = 'three.js'></script>
+     <script src = 'OrbitControls.js'></script>
 
 
     <script>
         "use strict"
+
+        console.log(THREE);
+
+        const scene = new THREE.Scene();
+        const fov = 70;
+        const aspectRatio = window.innerWidth / window.innerHeight;
+        const near = 0.1;
+        const far = 1000;
+        const camera = new THREE.PerspectiveCamera(fov, aspectRatio, near, far);
+        const renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setSize(900, 600);
+        renderer.setClearColor('grey');
+        camera.position.z = 10;
+
+        document.body.append(renderer.domElement);
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.update();
+
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const material = new THREE.MeshPhongMaterial({color: 'red'});
+        const cube = new THREE.Mesh(geometry, material);
+
+        cube.scale.set(4, 4, 4);
+        cube.position.x = - 3;
+        scene.add(cube);
+
+        const cone = new THREE.Mesh(new THREE.ConeGeometry(2, 5, 12), new THREE.MeshPhongMaterial({color: 'white'}));
+        
+        scene.add(cone);
+        cone.position.x = 4;
+        cone.position.y = 2;
+
+        const color ='white';
+        const intesity = 0.8;
+        const light = new THREE.DirectionalLight(color, intesity);
+
+        const light2 = new THREE.DirectionalLight('blue', intesity);
+        
+
+        light.position.set(-1, 4, 4);
+        light2.position.set(3, -4, 4);
+
+        scene.add(light);
+        scene.add(light2);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+            cone.rotation.x += 0.03;
+            cone.rotation.y += 0.03;
+            controls.update();
+        }
+        animate();
+
+
+      
+
+
+
         const $canvas = document.getElementById('canvas');
         const ctx = $canvas.getContext('2d');
 
-        const headCenterX = 300;
-        const headCenterY = 100;
-        const headRadius = 50;
-        const proportion = 30;
-        const bodyColor = 'lightblue';
-        const bodyBg = 'white';
-        const eyeColor = 'black';
-        const eyeRadius = 5;
-        const buttonColor = 'black';
-        const buttonRadius = 6;
-
-        ctx.lineWidth = 4;
-
-        drawSnowmanBody(headCenterX, headCenterY, headRadius, proportion, bodyBg, bodyColor);
-        drawCircle(headCenterX - headRadius/3, headCenterY - headRadius/4, eyeRadius, eyeColor, eyeColor);
-        drawCircle(headCenterX + headRadius/3, headCenterY - headRadius/4, eyeRadius, eyeColor, eyeColor);
-
-        for(let i = 0; i < 6; i++) {
-            drawCircle(headCenterX, headCenterY + headRadius + 20 + proportion * 1.5 * i, buttonRadius, buttonColor, buttonColor);
-        }
-        ctx.fillStyle = 'orange';
-        ctx.strokeStyle = 'orange';
-        ctx.lineWidth = 3.5;
-
-        ctx.beginPath();
-        ctx.moveTo(headCenterX, headCenterY + 6);
-        ctx.lineTo(headCenterX + 30, headCenterY + 15);
-        ctx.lineTo(headCenterX, headCenterY + 25);
-        ctx.stroke();
-        ctx.fill();
-        ctx.lineWidth = 3;
-        drawCircle(headCenterX + 2, headCenterY + 15.5, 9.5, 'orange', 'orange');
+        drowSnowman(300, 250, 60);
+        drowSnowman(100, 50, 20);
 
 
+        function drowSnowman(headCenterX, headCenterY, headRadius){
+            const proportion = headRadius *0.6;
+            const bodyColor = 'lightblue';
+            const bodyBg = 'white';
+            const eyeColor = 'black';
+            const handsColor = 'black';
+            const eyeRadius = headRadius *0.08;
+            const buttonColor = 'black';
+            const buttonRadius = proportion * 0.2;
+            const lineWidth = proportion * 0.13;
+            const noseColor = 'orange';
 
+            const handLeftBeginX = headCenterX - headRadius - proportion;
+            const handRightBeginX = headCenterX + headRadius + proportion;
+            const handBeginY = headCenterY + headRadius*1.8;
 
+            const footLeftBeginX = headCenterX - 0.8 * headRadius - 2* proportion;
+            const footRightBeginX = headCenterX + 0.8 * headRadius + 2* proportion;
+            const footBeginY = headCenterY + headRadius* 4.8 + proportion*2;
+            
 
+            ctx.lineWidth = lineWidth;
 
+            drawSnowmanBody(headCenterX, headCenterY, headRadius, proportion, bodyBg, bodyColor);
 
+            ctx.strokeStyle = bodyColor;
+            ctx.fillStyle = bodyBg;
+            drowFoot(footLeftBeginX, footBeginY);
+            drowFoot(footRightBeginX, footBeginY);
 
-        function drawSnowmanBody(headCenterX, headCenterY, headRadius, prop, bg, color) {
-            drawCircle(headCenterX, headCenterY + headRadius*4 + prop, headRadius + prop * 2, bg, color);
-            drawCircle(headCenterX, headCenterY + headRadius*2, headRadius + prop, bg, color);
-            drawCircle(headCenterX, headCenterY, headRadius, bg, color);
-        }
+            ctx.strokeStyle = handsColor;
+            drowHand(handLeftBeginX, handBeginY, false);
+            drowHand(handRightBeginX , handBeginY, true);
 
+            drawCircle(headCenterX - headRadius * 0.35, headCenterY - headRadius * 0.2, eyeRadius, eyeColor, eyeColor);
+            drawCircle(headCenterX + headRadius * 0.35, headCenterY - headRadius * 0.2, eyeRadius, eyeColor, eyeColor);
+
+            ctx.lineWidth = lineWidth * 0.75;
+
+            ctx.beginPath();
+            ctx.arc(headCenterX + 0.1* headRadius , headCenterY + 0.5 * headRadius, 0.5 * proportion, Math.PI * 0.1,  Math.PI * 0.7);
+            ctx.stroke();
+
+            for(let i = 0; i < 6; i++) {
+                drawCircle(headCenterX, headCenterY + headRadius + proportion * 0.7 + proportion * 1.5 * i, buttonRadius, buttonColor, buttonColor);
+            }
+
+            ctx.fillStyle = 'darkgrey';
+            ctx.lineWidth = lineWidth * 0.5;
+            drawBacket(headCenterX, headCenterY - 1.7 * headRadius, 0.5 * headRadius, headRadius * 0.75, headRadius);
+
+            ctx.fillStyle = noseColor;
+            ctx.strokeStyle = noseColor;
+            ctx.lineWidth = lineWidth * 0.875;
+
+            ctx.beginPath();
+            ctx.moveTo(headCenterX, headCenterY + 0.2 * proportion);
+            ctx.lineTo(headCenterX + proportion, headCenterY + 0.5 * proportion);
+            ctx.lineTo(headCenterX, headCenterY + 0.5 * headRadius);
+            ctx.stroke();
+            ctx.fill();
+            ctx.lineWidth = proportion * 0.1;
+            drawCircle(headCenterX + 0.04 * headRadius, headCenterY + 0.5 * proportion, proportion * 0.31, noseColor, noseColor);
 
 
         
-        
+            function drawSnowmanBody(headCenterX, headCenterY, headRadius, prop, bg, color) {
+                drawCircle(headCenterX, headCenterY + headRadius*4 + prop, headRadius + prop * 2, bg, color);
+                drawCircle(headCenterX, headCenterY + headRadius*2, headRadius + prop, bg, color);
+                drawCircle(headCenterX, headCenterY, headRadius, bg, color);
+            }
 
-        
-       /* drawCircle(50, 50, 30, 'green',false);
-        drawCircle(50, 100, 30, 'green', false);
-        drawCircle(50, 150, 30, 'green', true);*/
-        
+            function drowFoot(beginX, beginY) {
+                ctx.beginPath();
+                ctx.moveTo(beginX, beginY);
+                ctx.quadraticCurveTo(beginX - proportion * 1.5, beginY, beginX - proportion * 1.5, beginY + headRadius * 0.5);
+                ctx.quadraticCurveTo(beginX - proportion * 1.5, beginY + proportion * 1.066, beginX - proportion, beginY + proportion * 1.166);
+                ctx.quadraticCurveTo(beginX + headRadius, beginY + proportion * 1.5, beginX + headRadius, beginY + headRadius * 0.5);
+                ctx.quadraticCurveTo(beginX + headRadius, beginY, beginX, beginY);
+                ctx.fill();
+                ctx.stroke();
+                
+            }
+
+            function drowHand(beginX, beginY, isRight) {
+                let direction = 1;
+                if(!isRight) direction = -1;
+                ctx.beginPath();
+                ctx.moveTo(beginX, handBeginY);
+                ctx.lineTo(beginX + proportion * 2.33 * direction, beginY - proportion * 2.33);
+                ctx.moveTo(beginX + proportion * 1.5 * direction, beginY - proportion * 1.5);
+                ctx.lineTo(beginX + headRadius * direction, beginY - proportion * 2.33);
+                ctx.moveTo(beginX + proportion * direction, beginY - proportion);
+                ctx.lineTo(beginX + proportion * 2.33 * direction, beginY - proportion * 1.33);
+                ctx.stroke();
+            }
+        }  
 
         function drawCircle(x, y, radius, bg, color) {
             ctx.fillStyle = bg;
@@ -90,12 +198,17 @@
             ctx.stroke(); 
         }
 
-        function fillRect(x, y, width, height) {
-            ctx.fillRect(x, y, width, height);
+        function drawBacket(beginX, beginY, top, bottom, height) {
+            ctx.beginPath();
+            ctx.ellipse(beginX, beginY, top, 0.5 * top, 0, 0, 2 * Math.PI);
+            ctx.ellipse(beginX, beginY + height, bottom, bottom / 3, 0, 0, Math.PI);
+            ctx.lineTo(beginX - top, beginY);
+            ctx.fill();
+            ctx.stroke();
         }
-
-
         
+
+              
 
     </script>
 </body>
