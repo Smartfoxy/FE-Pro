@@ -16,7 +16,7 @@
 
 <body>
 
-     <canvas id="canvas" width="400" height="300"></canvas>
+     <canvas id="canvas" width="600" height="600"></canvas>
 
 
     <script>
@@ -24,34 +24,56 @@
         const $canvas = document.getElementById('canvas');
         const ctx = $canvas.getContext('2d');
 
-        const headRadius = 40;
-        const proportion = 20;
+        const headCenterX = 300;
+        const headCenterY = 100;
+        const headRadius = 50;
+        const proportion = 30;
         const bodyColor = 'lightblue';
+        const bodyBg = 'white';
+        const eyeColor = 'black';
+        const eyeRadius = 5;
+        const buttonColor = 'black';
+        const buttonRadius = 6;
 
         ctx.lineWidth = 4;
 
-        drawSnowmanBody(200, 60, headRadius, proportion, bodyColor);
-        
+        drawSnowmanBody(headCenterX, headCenterY, headRadius, proportion, bodyBg, bodyColor);
+        drawCircle(headCenterX - headRadius/3, headCenterY - headRadius/4, eyeRadius, eyeColor, eyeColor);
+        drawCircle(headCenterX + headRadius/3, headCenterY - headRadius/4, eyeRadius, eyeColor, eyeColor);
+
+        for(let i = 0; i < 6; i++) {
+            drawCircle(headCenterX, headCenterY + headRadius + 20 + proportion * 1.5 * i, buttonRadius, buttonColor, buttonColor);
+        }
+        ctx.fillStyle = 'orange';
+        ctx.strokeStyle = 'orange';
+        ctx.lineWidth = 3.5;
+
+        ctx.beginPath();
+        ctx.moveTo(headCenterX, headCenterY + 6);
+        ctx.lineTo(headCenterX + 30, headCenterY + 15);
+        ctx.lineTo(headCenterX, headCenterY + 25);
+        ctx.stroke();
+        ctx.fill();
+        ctx.lineWidth = 3;
+        drawCircle(headCenterX + 2, headCenterY + 15.5, 9.5, 'orange', 'orange');
 
 
 
-        function drawSnowmanBody(headCenterX, headCenterY, headRadius, prop, color) {
-            for(let i = 0; i < 3; i++){
-                drawCircle(headCenterX, headCenterY + headRadius * i * 2 + prop *(i*2-1), headRadius + prop * i, color, false);
-            }
+
+
+
+
+
+        function drawSnowmanBody(headCenterX, headCenterY, headRadius, prop, bg, color) {
+            drawCircle(headCenterX, headCenterY + headRadius*4 + prop, headRadius + prop * 2, bg, color);
+            drawCircle(headCenterX, headCenterY + headRadius*2, headRadius + prop, bg, color);
+            drawCircle(headCenterX, headCenterY, headRadius, bg, color);
         }
 
 
 
         
-        ctx.fillStyle = 'darkgrey';
-        ctx.strokeStyle = 'blue';
-        ctx.lineWidth = 4;
-
-        ctx.beginPath();
-        ctx.moveTo(10, 10);
-        ctx.lineTo(60, 60);
-        ctx.stroke();
+        
 
         
        /* drawCircle(50, 50, 30, 'green',false);
@@ -59,12 +81,13 @@
         drawCircle(50, 150, 30, 'green', true);*/
         
 
-        function drawCircle(x, y, radius, color, isFill) {
-            ctx.fillStyle = color;
+        function drawCircle(x, y, radius, bg, color) {
+            ctx.fillStyle = bg;
             ctx.strokeStyle = color;
             ctx.beginPath();
             ctx.arc(x, y, radius, 0, 2 * Math.PI);
-            isFill ? ctx.fill() : ctx.stroke(); 
+            ctx.fill();
+            ctx.stroke(); 
         }
 
         function fillRect(x, y, width, height) {
