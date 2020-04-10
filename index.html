@@ -186,24 +186,21 @@
         }
 
                            /*task #2*/
-
-        let uah = {
-            name: 'uah',
-            sale: '1',
-            purchase: '1'
+        let currencies = {
+            uah : {
+                sale: '1',
+                purchase: '1'
+           },
+            usd : {
+                sale: '27',
+                purchase: '28'
+            },
+            eur : {
+                sale: '30',
+                purchase: '31'
+            }
         }
-        let usd = {
-            name: 'usd',
-            sale: '27',
-            purchase: '28'
-        }
-        let eur = {
-            name: 'eur',
-            sale: '30',
-            purchase: '31'
-        }
-
-        let currencies = [uah, usd, eur];
+         
 
         let $converterForm = document.forms.converter;
 
@@ -252,6 +249,8 @@
             }
         })
 
+        
+
        
         function converter() {
             
@@ -262,17 +261,10 @@
             if(cur1 === cur2) {
                 result = sum;
             }else if($converterForm.operation.value ==='sale') {
-                result = sum * currencies.find(function(el){
-                    return (el['name'] === cur1);
-                }).sale / currencies.find(function(el){
-                    return (el['name'] === cur2);
-                }).purchase;
+                console.log(currencies[cur1]);
+                result = sum * currencies[cur1].sale / currencies[cur2].purchase;
             }else {
-                result = sum * currencies.find(function(el){
-                    return (el['name'] === cur1);
-                }).purchase / currencies.find(function(el){
-                    return (el['name'] === cur2);
-                }).sale;
+                result = sum * currencies[cur1].purchase / currencies[cur2].sale;
                
             }
             $converterForm.result.value = Math.round(result*100)/100;
