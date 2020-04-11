@@ -95,18 +95,14 @@
             const proportion = headRadius *0.6;
             const bodyColor = 'lightblue';
             const bodyBg = 'white';
-            const eyeColor = 'black';
-            const handsColor = 'black';
+            const secondColor = 'black';
+            const noseColor = 'orange';      
             const eyeRadius = headRadius *0.08;
-            const buttonColor = 'black';
             const buttonRadius = proportion * 0.2;
             const lineWidth = proportion * 0.13;
-            const noseColor = 'orange';
-
             const handLeftBeginX = headCenterX - headRadius - proportion;
             const handRightBeginX = headCenterX + headRadius + proportion;
             const handBeginY = headCenterY + headRadius*1.8;
-
             const footLeftBeginX = headCenterX - 0.8 * headRadius - 2* proportion;
             const footRightBeginX = headCenterX + 0.8 * headRadius + 2* proportion;
             const footBeginY = headCenterY + headRadius* 4.8 + proportion*2;
@@ -121,41 +117,59 @@
             drowFoot(footLeftBeginX, footBeginY);
             drowFoot(footRightBeginX, footBeginY);
 
-            ctx.strokeStyle = handsColor;
+            ctx.strokeStyle = secondColor;
             drowHand(handLeftBeginX, handBeginY, false);
             drowHand(handRightBeginX , handBeginY, true);
 
-            drawCircle(headCenterX - headRadius * 0.35, headCenterY - headRadius * 0.2, eyeRadius, eyeColor, eyeColor);
-            drawCircle(headCenterX + headRadius * 0.35, headCenterY - headRadius * 0.2, eyeRadius, eyeColor, eyeColor);
+            drawEye(false,secondColor);
+            drawEye(true, secondColor);
+
+            drawNose(noseColor);
 
             ctx.lineWidth = lineWidth * 0.75;
+            drawMouth(secondColor);
 
-            ctx.beginPath();
-            ctx.arc(headCenterX + 0.1* headRadius , headCenterY + 0.5 * headRadius, 0.5 * proportion, Math.PI * 0.1,  Math.PI * 0.7);
-            ctx.stroke();
-
-            for(let i = 0; i < 6; i++) {
-                drawCircle(headCenterX, headCenterY + headRadius + proportion * 0.7 + proportion * 1.5 * i, buttonRadius, buttonColor, buttonColor);
-            }
+            drawButtons(6, secondColor);
+            
 
             ctx.fillStyle = 'darkgrey';
             ctx.lineWidth = lineWidth * 0.5;
             drawBacket(headCenterX, headCenterY - 1.7 * headRadius, 0.5 * headRadius, headRadius * 0.75, headRadius);
 
-            ctx.fillStyle = noseColor;
-            ctx.strokeStyle = noseColor;
-            ctx.lineWidth = lineWidth * 0.875;
 
-            ctx.beginPath();
-            ctx.moveTo(headCenterX, headCenterY + 0.2 * proportion);
-            ctx.lineTo(headCenterX + proportion, headCenterY + 0.5 * proportion);
-            ctx.lineTo(headCenterX, headCenterY + 0.5 * headRadius);
-            ctx.stroke();
-            ctx.fill();
-            ctx.lineWidth = proportion * 0.1;
-            drawCircle(headCenterX + 0.04 * headRadius, headCenterY + 0.5 * proportion, proportion * 0.31, noseColor, noseColor);
+            function drawButtons(num, color) {
+                for(let i = 0; i < num; i++) {
+                drawCircle(headCenterX, headCenterY + headRadius + proportion * 0.7 + proportion * 1.5 * i, buttonRadius, color, color);
+               }
+            }
 
+            function drawEye(isRight, color) {
+                let pos = 1;
+                if(!isRight) pos = -1;
+                drawCircle(headCenterX + headRadius * 0.35 * pos, headCenterY - headRadius * 0.2, eyeRadius, color, color);
+            }
 
+            function drawMouth(color) {
+                ctx.strokeStyle = color;
+                ctx.beginPath();
+                ctx.arc(headCenterX + 0.1* headRadius , headCenterY + 0.5 * headRadius, 0.5 * proportion, Math.PI * 0.1,  Math.PI * 0.7);
+                ctx.stroke();
+
+            }
+
+            function drawNose(color){
+                ctx.fillStyle = color;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = lineWidth * 0.875;
+                ctx.beginPath();
+                ctx.moveTo(headCenterX, headCenterY + 0.2 * proportion);
+                ctx.lineTo(headCenterX + proportion, headCenterY + 0.5 * proportion);
+                ctx.lineTo(headCenterX, headCenterY + 0.5 * headRadius);
+                ctx.stroke();
+                ctx.fill();
+                ctx.lineWidth = proportion * 0.1;
+                drawCircle(headCenterX + 0.04 * headRadius, headCenterY + 0.5 * proportion, proportion * 0.31, color, color);
+            }
         
             function drawSnowmanBody(headCenterX, headCenterY, headRadius, prop, bg, color) {
                 drawCircle(headCenterX, headCenterY + headRadius*4 + prop, headRadius + prop * 2, bg, color);
