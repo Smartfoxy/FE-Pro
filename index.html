@@ -26,22 +26,47 @@
             font-size: 20px;
             width: 400px;
             border: 1px solid #f0ebeb;
-            border-radius: 4px;
+            border-radius: 5px;
+            margin-bottom: 1px;
         }
         .header {
-            padding: 5px 20px;
+            padding: 5px 30px;
             color: cornflowerblue;
-            height: 60px;
+            height: 30px;
             cursor: pointer;
+            position: relative;
+        }
+        .active,
+        .header:hover {
+            border: 1px solid; 
+            border-color: orange orange transparent orange;
+            color: orange;
+            border-radius: 5px;
+        }
+        .active {
+            height: 60px;
+        }
+        .header::before {
+            content: '';
+            border: 8px solid;
+            border-color: transparent  transparent transparent orange;
+            position: absolute;
+            left: 7px;
+            top: 9px;
+        }
+        .header.active::before {
+            top: 14px;            
+            border-color:  orange transparent  transparent transparent;
         }
         .content {
-            padding: 5px 20px;
+            padding: 0 20px;
             background-color: #f0ebeb;
-            height: 40px;
+            box-sizing: border-box;
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease-out;
         }
        
-       
-
     </style>
 
 </head>
@@ -55,25 +80,23 @@
     <div class="accordion">
         <div class="section">
             <div class="header" data-toggle-id = 'section1-content'>Section 1</div>
-            <div class="content" id = 'section1-content' hidden>I'm from section 1 Body</div>
+            <div class="content" id = 'section1-content' >I'm from section 1 Body</div>
         </div>
         <div class="section">
             <div class="header" data-toggle-id = 'section2-content'>Section 2</div>
-            <div class="content" id = 'section2-content' hidden>I'm from section 2 Body</div>
+            <div class="content" id = 'section2-content' >I'm from section 2 Body</div>
         </div>
         <div class="section">
             <div class="header" data-toggle-id = 'section3-content'>Section 3</div>
-            <div class="content" id = 'section3-content' hidden>I'm from section 3 Body</div>
+            <div class="content" id = 'section3-content' >I'm from section 3 Body</div>
         </div>
         <div class="section">
             <div class="header" data-toggle-id = 'section4-content'>Section 4</div>
-            <div class="content" id = 'section4-content' hidden>I'm from section 4 Body</div>
+            <div class="content" id = 'section4-content' >I'm from section 4 Body</div>
         </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-    
 
     <script>
         "use strict"
@@ -115,19 +138,16 @@
             return $table;
         }
 
-       /* const $accordion = document.querySelector('.accordion');
-        $accordion.addEventListener('click', function(event) {
-            let id = event.target.dataset.toggleId;
-            if(!id) return;
-            let elem = document.getElementById(id);
-            elem.hidden = !elem.hidden;
-        })*/
-        $('.header').click(function(event) {
-            $('.header').css('color','cornflowerblue');
-            $('.content').attr('hidden', true);
+        /* Task №2*/
+
+       
+
+        $('.header').click(function(event) {   
+            $('.content').height(0);  
             let id = this.dataset.toggleId;
-            $('#' + id).attr('hidden', false);
-            $(this).css({color: 'orange'});
+            $('#' + id).height() === 0 ? $('#' + id).height(60) : $('#' + id).height(0);   
+            $('.header').not(this).removeClass('active');
+            $(this).toggleClass('active');
             
         })
 
