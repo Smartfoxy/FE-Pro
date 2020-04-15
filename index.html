@@ -6,65 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>jQuery</title>
     <style>
-        td {
-            padding: 5px;
-            border: 1px solid;
-            cursor: pointer;
+        .box {
+            margin: 10px;
         }
-        .result {
-            height: 20px;
+        .colorbox {
             width: 30px;
-            border: 1px solid blue;
-            margin-left: 20px;
-            text-align: center;
-        }
-        .accordion, 
-        table {
-            margin: 20px;
-        }
-        .section {
-            font-size: 20px;
-            width: 400px;
-            border: 1px solid #f0ebeb;
-            border-radius: 5px;
-            margin-bottom: 1px;
-        }
-        .header {
-            padding: 5px 30px;
-            color: cornflowerblue;
             height: 30px;
+            margin: 10px;
+            border: 1px solid black;
+            text-align: center;
+            float: left;
+            line-height: 30px;
             cursor: pointer;
-            position: relative;
         }
-        .active,
-        .header:hover {
-            border: 1px solid; 
-            border-color: orange orange transparent orange;
-            color: orange;
-            border-radius: 5px;
+        .blue {
+            background: blue;
         }
-        .active {
-            height: 60px;
+        .green {
+            background: green;
         }
-        .header::before {
-            content: '';
-            border: 8px solid;
-            border-color: transparent  transparent transparent orange;
-            position: absolute;
-            left: 7px;
-            top: 9px;
+        .yellow {
+            background: yellow;
         }
-        .header.active::before {
-            top: 14px;            
-            border-color:  orange transparent  transparent transparent;
-        }
-        .content {
-            padding: 0 20px;
-            background-color: #f0ebeb;
-            box-sizing: border-box;
-            height: 0;
-            overflow: hidden;
-            transition: height 0.3s ease-out;
+        .red {
+            background: red;
         }
        
     </style>
@@ -73,84 +38,78 @@
 
 <body>
 
-    <div class="container">
-        <div class="result"></div>
-    </div>
+    <div class="box">
+        <span>0</span>
+        <button type="button" data-action="minus">-</button>
+        <button type="button" data-action="plus">+</button>
+     </div>
+     <div class="box">
+        <span>0</span>
+        <button type="button" data-action="minus">-</button>
+        <button type="button" data-action="plus">+</button>
+     </div>
+     <div class="box">
+        <span>0</span>
+        <button type="button" data-action="minus">-</button>
+        <button type="button" data-action="plus">+</button>
+     </div>
 
-    <div class="accordion">
-        <div class="section">
-            <div class="header" data-toggle-id = 'section1-content'>Section 1</div>
-            <div class="content" id = 'section1-content' >I'm from section 1 Body</div>
-        </div>
-        <div class="section">
-            <div class="header" data-toggle-id = 'section2-content'>Section 2</div>
-            <div class="content" id = 'section2-content' >I'm from section 2 Body</div>
-        </div>
-        <div class="section">
-            <div class="header" data-toggle-id = 'section3-content'>Section 3</div>
-            <div class="content" id = 'section3-content' >I'm from section 3 Body</div>
-        </div>
-        <div class="section">
-            <div class="header" data-toggle-id = 'section4-content'>Section 4</div>
-            <div class="content" id = 'section4-content' >I'm from section 4 Body</div>
-        </div>
-    </div>
+     <div class="container">
+        <div class="colorbox" data-color = 0>1</div>
+        <div class="colorbox" data-color = 0>2</div>
+        <div class="colorbox" data-color = 0>3</div>
+        <div class="colorbox" data-color = 0>4</div>
+        <div class="colorbox" data-color = 0>5</div>
+     </div>
+     
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <script>
         "use strict"
 
-        const $container = document.querySelector('.container');
-
-        $container.prepend(createTable(3, 3));
-        let $table = document.querySelector('table');
-        fillTableRandom($table, 1, 101);
-
-        let $result = document.querySelector('.result');
-
-        $table.addEventListener('click', function(el){
-            if(el.target.tagName !== 'TD') return;
-            $result.innerHTML = el.target.textContent;
-        })
+          /* а как- то локоничней /короче можно решить?*/
+        $('.box').on('click', 'button', (function(ev){
+            let count = $(this).siblings('span').text();
+            if($(this).attr('data-action') === 'plus') count++;
+            if($(this).attr('data-action') === 'minus') count--;
+            $(this).siblings('span').text(count);
+        }));
 
 
-        function fillTableRandom(table,min,max) {
-            for(let tr of table.rows) {
-                for(let td of tr.cells){
-                    td.innerHTML = Math.floor(Math.random() * (max - min)) + min;
-                }
-            }
-        }
-
-        function createTable(row, col) {
-            let $table = document.createElement('table');
-            let inner ='';
-            for(let i = 0; i <row; i++) {
-                let row = '<tr>';
-                for(let j = 0; j < col; j++) {
-                    row += '<td></td>';
-                }
-                row += '</tr>'; 
-                inner += row;  
-            }
-            $table.innerHTML = inner;
-            return $table;
-        }
-
-        /* Task №2*/
-
-       
-
-        $('.header').click(function(event) {   
-            $('.content').height(0);  
-            let id = this.dataset.toggleId;
-            $('#' + id).height() === 0 ? $('#' + id).height(60) : $('#' + id).height(0);   
-            $('.header').not(this).removeClass('active');
-            $(this).toggleClass('active');
+        /*$('.colorbox').click(function(){
+            if($(this).hasClass('blue')){
+                $(this).addClass('green').removeClass('blue');
+            } else if($(this).hasClass('green')){
+                $(this).addClass('yellow').removeClass('green');
+            }  else if($(this).hasClass('yellow')){
+                $(this).addClass('blue').removeClass('yellow');
+            } else {
+                $(this).addClass('blue');
+            } 
+            $(this).parent('.container').append($(this)); 
             
-        })
+        })*/
+             
+        const colors = {
+            0: 'transparent', 
+            1: 'blue',
+            2: 'green',
+            3:'yellow',
+            4: 'red'
+        };
 
+        $('.colorbox').click(function(){
+            let currentColorKey = +$(this).attr('data-color');
+            let newColorKey = currentColorKey + 1;
+            if(newColorKey > Object.keys(colors).length - 1) { /*это нужно как то в jquerry заворачивать?*/
+                newColorKey -= Object.keys(colors).length - 1; 
+            } 
+            $(this).removeClass(colors[currentColorKey]).addClass(colors[newColorKey]);
+            $(this).attr('data-color', newColorKey);
+            
+            $(this).parent('.container').append($(this)); 
+        })
 
     </script>
 </body>
