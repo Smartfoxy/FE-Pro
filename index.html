@@ -28,11 +28,14 @@
         const test2 = bind(foo, obj);
         test2('Еще раз', ')))');
 
-        function bind(fn, context, ...manyArgs) {
-            if(typeof context !== 'object') context = new Object(context);
-            return function (...theArgs){
-                context.fn = fn;
-                theArgs.length === 0 ? context.fn(...manyArgs) : context.fn(...theArgs);
+         function bind() {
+            const fn = arguments [0];
+            const thisArg = arguments [1];
+            const args = Array.from(arguments).slice(2);
+            if(typeof thisArg !== 'object') thisArg = new Object(thisArg);
+
+            return function (){
+                arguments.length === 0 ? fn.apply(thisArg, args) : fn.apply(thisArg, arguments);
             }
         }
 
