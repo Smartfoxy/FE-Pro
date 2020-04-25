@@ -4,90 +4,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>this</title>
+    <title>closure</title>
     <style>
+        button {
+            cursor: pointer;
+        }
+        .container {
+            margin: 10px;
+        }
+        
     </style>
 
 </head>
 
 <body>
+    <div class="container">
+        <button class = "fb"></button> 
+        <button class = "reset_fb">Reset likes</button>
+    </div>
+    <div class="container">
+        <button class = 'vk'></button>
+        <button class = "reset_vk">Reset likes</button>
+    </div>    
+    
 
      
 
     <script>
         "use strict"
-
-        /* bind*/
         
-        const obj = {
-            rezult: 'Получилось!'
-        }
+         function someFn() {
+             let sum = 0;
+             return function(num) {
+                 return sum += num;
+             }
+         }
 
-        const test = bind(foo, obj, 'Круто!', ':)');
-        test();
-        const test2 = bind(foo, obj);
-        test2('Еще раз', ')))');
+         let sum = someFn();
 
-        function bind(fn, context, ...manyArgs) {
-            if(typeof context !== 'object') context = new Object(context);
-            return function (...theArgs){
-                context.fn = fn;
-                theArgs.length === 0 ? context.fn(...manyArgs) : context.fn(...theArgs);
+         console.log(sum(3));
+         console.log(sum(5));
+         console.log(sum(20));
+
+
+        const startFb = 0;
+        const startVk = 0;
+        const stepFb = 3;
+        const stepVk = 10;
+        const textFb = '  Like FB';
+        const textVk = '  Like VK';
+
+        const fbButton = document.querySelector('.fb');
+        const vkButton = document.querySelector('.vk');
+        const fbReset = document.querySelector('.reset_fb');
+        const vkReset = document.querySelector('.reset_vk');
+       
+        fbButton.innerHTML = startFb + textFb;
+        vkButton.innerHTML = startVk + textVk;
+
+        let fbCounter = createCounter(startFb, stepFb);
+        let vkCounter = createCounter(startVk, stepVk);
+
+        function createCounter(startCount, step) {
+            let currentCount = startCount;
+
+            return function(isReset){
+                currentCount = (currentCount + step) * isReset;
+                return currentCount;
             }
         }
 
-        function foo(text, emotion) {
-            console.log (`${text} ${this.rezult} ${emotion}`);
-        }
+        fbButton.addEventListener('click', function(){
+            fbButton.innerHTML = fbCounter(1) + textFb;
+        });
 
+        vkButton.addEventListener('click', function(){
+            vkButton.innerHTML = vkCounter(1) + textVk;
+        });
 
-        /*map*/
+        fbReset.addEventListener('click', function(){
+            fbButton.innerHTML = fbCounter(0) + textFb;
+        });
 
-        const arr = [2,5,3,7];
+        vkReset.addEventListener('click', function(){
+            vkButton.innerHTML = vkCounter(0) + textVk;
+        });
 
-        const arrMap = map(arr, everySecondTwice);
-        console.log(arr);
-        console.log(arrMap);
+         /*Сначала обнуляла вызывая еще раз createCounter(0, stepFb) код ниже, но потом подумала что наверное это неправильно 
+         создавать еще окружения? или норм т.к. память очищается после того как перестает ссылаться на предыдущую функцию? вообщем это вопрос...*/
 
-        
-        const student1 = new student('Petya');
-        const student2 = new student('Vasya');
-        const student3 = new student('Olya');
-        const student4 = new student('Bob');
+       /* fbReset.addEventListener('click', function(){
+            fbCounter = createCounter(0, stepFb);
+            fbButton.innerHTML = 0 + textFb;
+        });
 
-        const arrObj = [student1, student2, student3];
+        vkReset.addEventListener('click', function(){
+            vkCounter = createCounter(0, stepVk);
+            vkButton.innerHTML = 0 + textVk;
+        });*/
 
-        const arrObjMap = map(arrObj, sayHi);
-        const arrObjMap2 = map(arrObj, sayHi, student4);
-        
+                                    /* Палиндром*/
 
-        console.log(arrObj);
-        console.log(arrObjMap); 
-        console.log(arrObjMap2); 
-        
-        function student(name){
-            this.name = name;
-        }
-
-        function map(arr, cb, thisArg) {
-            let arrResult = [];
-            let context = thisArg;
-            for(let i = 0; i < arr.length; i++) {
-                if(thisArg === undefined) context = arr[i];
-                arrResult[i] = cb.call(context, arr[i], i, arr);
+        let count = 0;
+        function findPalidrom(num) {
+            let reverseNum = reverse(num);
+            console.log(count++ + ' iter: ' + num + ' + ' + reverseNum);
+                      
+            if(num === reverseNum) {               
+                return reverseNum;
             }
-            return arrResult;
+            
+            return findPalidrom(num + reverseNum);    
+        }
+        
+        function reverse(num) {
+            let result = 0;
+            while(num > 0){
+                result *= 10;
+                result += num % 10;
+                num = Math.floor(num / 10);
+            }
+            return result;
         }
 
-        function everySecondTwice(num, index) {
-            if(index % 2 === 0) num *= 2; 
-            return num;
-        }
+        function reverse2(num) {
+            return Number(String(num).split('').reverse().join(''));
+        }  
 
-        function sayHi() {
-            return `Hi! ${this.name}`;
-        }
+        let num = 89;
+        console.log(findPalidrom(num));    
+                  
 
+
+        
 
     </script>
 </body>
