@@ -4,134 +4,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>closure</title>
+    <title>lesson_20</title>
     <style>
-        button {
-            cursor: pointer;
-        }
-        .container {
-            margin: 10px;
-        }
         
     </style>
 
 </head>
 
 <body>
-    <div class="container">
-        <button class = "fb"></button> 
-        <button class = "reset_fb">Reset likes</button>
-    </div>
-    <div class="container">
-        <button class = 'vk'></button>
-        <button class = "reset_vk">Reset likes</button>
-    </div>    
     
-
-     
 
     <script>
         "use strict"
-        
-         function someFn() {
-             let sum = 0;
-             return function(num) {
-                 return sum += num;
-             }
-         }
 
-         let sum = someFn();
+        /* task №1*/
 
-         console.log(sum(3));
-         console.log(sum(5));
-         console.log(sum(20));
+        fizzBuzz(20);
 
-
-        const startFb = 0;
-        const startVk = 5;
-        const stepFb = 1;
-        const stepVk = 10;
-        const textFb = '  Like FB';
-        const textVk = '  Like VK';
-
-        const fbButton = document.querySelector('.fb');
-        const vkButton = document.querySelector('.vk');
-        const fbReset = document.querySelector('.reset_fb');
-        const vkReset = document.querySelector('.reset_vk');
-       
-        fbButton.innerHTML = startFb + textFb;
-        vkButton.innerHTML = startVk + textVk;
-
-        let fbCounter = createCounter(startFb, stepFb);
-        let vkCounter = createCounter(startVk, stepVk);
-
-        function createCounter(startCount, step) {
-            let currentCount = startCount;
-
-            return {
-                next() {
-                    return currentCount += step;
-                },
-                reset(resetValue) {
-                    currentCount = (resetValue || resetValue === 0) ? resetValue : startCount;
-                    return currentCount;
-                }
-            }
+        function fizzBuzz(n) {
+            for(let i = 1; i <= n; i++){
+               let current = (i % 3 === 0 && i % 5 === 0) ? 'fizzbuzz' : (i % 3 === 0) ? 'fizz' : (i % 5 === 0) ? 'buzz' : i;
+                console.log(current);
+            }   
         }
 
-        fbButton.addEventListener('click', function(){
-            fbButton.innerHTML = fbCounter.next() + textFb;
-        });
+        /* task №2*/
 
-        vkButton.addEventListener('click', function(){
-            vkButton.innerHTML = vkCounter.next() + textVk;
-        });
-
-        fbReset.addEventListener('click', function(){
-            fbButton.innerHTML = fbCounter.reset(17) + textFb;
-        });
-
-        vkReset.addEventListener('click', function(){
-            vkButton.innerHTML = vkCounter.reset() + textVk;
-        });
-
-     
-
-                                    /* Палиндром*/
-
-        let num = 89;
-        console.log(findPalidrom(num)); 
-
-        function findPalidrom(num, count = 0) {
-            let reverseNum = reverse(num);
-            console.log(count++ + ' iter: ' + num + ' + ' + reverseNum);
-                      
-            if(num === reverseNum) {               
-                return reverseNum;
-            }
-            
-            return findPalidrom(num + reverseNum, count);    
-        }
+        console.log(countVowels('Hello WOrld!'));
         
-    
-        function reverse(num, result = 0) {
-            result *= 10;
-            result += num % 10;
+        function countVowels(str) {
+             let count = 0;
+             const strArr = str.split('');
 
-            if(Math.floor(num / 10) === 0) {
-                return result;
+             strArr.forEach(function(el) {
+                 if(findVowels(el.toLowerCase())) count++;
+             })
+
+             return count;
+        }
+
+        function findVowels(simbol) {
+            const vowels = ['a', 'e' , 'i', 'o' , 'u'];
+            return vowels.includes(simbol);
+        }
+
+        /* task №3*/
+
+        console.log(fibonacci(11));
+
+        function fibonacci(n, i = 2, prev = 0, current = 1) {
+            if(n === 1) {
+                return prev;
             }
-            
-            return  reverse(Math.floor(num / 10), result);
+            if(i === n) {
+                return current;
+            }
+            return fibonacci(n, ++i, current, prev + current);
         }
 
 
-        /*function reverse2(num) {
-            return Number(String(num).split('').reverse().join(''));
-        } */ 
 
         
- 
+
+
+
+
     </script>
 </body>
 
