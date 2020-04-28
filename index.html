@@ -25,17 +25,16 @@
 
         const test = bind(foo, obj, 'Круто!', ':)');
         test();
-        const test2 = bind(foo, obj);
-        test2('Еще раз', ')))');
+        const test2 = bind(foo, obj, 'Еще раз');
+        test2(')))');
 
-         function bind() {
-            const fn = arguments [0];
-            const thisArg = arguments [1];
-            const args = Array.from(arguments).slice(2);
+        function bind(fn, thisArg) {
+            const args = Array.prototype.slice.call(arguments,2);
             if(typeof thisArg !== 'object') thisArg = new Object(thisArg);
 
             return function (){
-                arguments.length === 0 ? fn.apply(thisArg, args) : fn.apply(thisArg, arguments);
+                const args2 = Array.prototype.slice.call(arguments);
+                fn.apply(thisArg, args.concat(args2));
             }
         }
 
