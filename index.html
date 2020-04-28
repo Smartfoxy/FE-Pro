@@ -48,8 +48,8 @@
 
 
         const startFb = 0;
-        const startVk = 0;
-        const stepFb = 3;
+        const startVk = 5;
+        const stepFb = 1;
         const stepVk = 10;
         const textFb = '  Like FB';
         const textVk = '  Like VK';
@@ -68,45 +68,41 @@
         function createCounter(startCount, step) {
             let currentCount = startCount;
 
-            return function(isReset){
-                currentCount = (currentCount + step) * isReset;
-                return currentCount;
+            return {
+                next() {
+                    return currentCount += step;
+                },
+                reset(resetValue) {
+                    currentCount = (resetValue || resetValue === 0) ? resetValue : startCount;
+                    return currentCount;
+                }
             }
         }
 
         fbButton.addEventListener('click', function(){
-            fbButton.innerHTML = fbCounter(1) + textFb;
+            fbButton.innerHTML = fbCounter.next() + textFb;
         });
 
         vkButton.addEventListener('click', function(){
-            vkButton.innerHTML = vkCounter(1) + textVk;
+            vkButton.innerHTML = vkCounter.next() + textVk;
         });
 
         fbReset.addEventListener('click', function(){
-            fbButton.innerHTML = fbCounter(0) + textFb;
+            fbButton.innerHTML = fbCounter.reset(17) + textFb;
         });
 
         vkReset.addEventListener('click', function(){
-            vkButton.innerHTML = vkCounter(0) + textVk;
+            vkButton.innerHTML = vkCounter.reset() + textVk;
         });
 
-         /*Сначала обнуляла вызывая еще раз createCounter(0, stepFb) код ниже, но потом подумала что наверное это неправильно 
-         создавать еще окружения? или норм т.к. память очищается после того как перестает ссылаться на предыдущую функцию? вообщем это вопрос...*/
-
-       /* fbReset.addEventListener('click', function(){
-            fbCounter = createCounter(0, stepFb);
-            fbButton.innerHTML = 0 + textFb;
-        });
-
-        vkReset.addEventListener('click', function(){
-            vkCounter = createCounter(0, stepVk);
-            vkButton.innerHTML = 0 + textVk;
-        });*/
+     
 
                                     /* Палиндром*/
 
-        let count = 0;
-        function findPalidrom(num) {
+        let num = 89;
+        console.log(findPalidrom(num)); 
+
+        function findPalidrom(num, count = 0) {
             let reverseNum = reverse(num);
             console.log(count++ + ' iter: ' + num + ' + ' + reverseNum);
                       
@@ -114,30 +110,28 @@
                 return reverseNum;
             }
             
-            return findPalidrom(num + reverseNum);    
+            return findPalidrom(num + reverseNum, count);    
         }
         
-        function reverse(num) {
-            let result = 0;
-            while(num > 0){
-                result *= 10;
-                result += num % 10;
-                num = Math.floor(num / 10);
+    
+        function reverse(num, result = 0) {
+            result *= 10;
+            result += num % 10;
+
+            if(Math.floor(num / 10) === 0) {
+                return result;
             }
-            return result;
+            
+            return  reverse(Math.floor(num / 10), result);
         }
 
-        function reverse2(num) {
+
+        /*function reverse2(num) {
             return Number(String(num).split('').reverse().join(''));
-        }  
-
-        let num = 89;
-        console.log(findPalidrom(num));    
-                  
-
+        } */ 
 
         
-
+ 
     </script>
 </body>
 
