@@ -43,7 +43,37 @@
        };
 
 
-       const promise = new Promise(function(resolve, reject) {
+       function willGetNewPhone() {
+           const resultGood = Math.floor(Math.random() * (12) + 1);
+
+           return new Promise(function(resolve, reject) {
+               if(resultGood > 8) {
+                   const phone = {
+                       brand: 'Apple',
+                       model: '11'
+                   }
+                   resolve(phone);
+               } else {
+                   const reason = new Error('You have bad markes');
+                   reject(reason);
+               }
+           })
+       }
+
+       willGetNewPhone()
+            .then(function(phone){
+                console.log(`Look at my ${phone.brand} ${phone.model}`);
+            })
+            .catch(function(reason) {
+                console.log(reason);
+            }) 
+            .finally(function() {
+                console.log('Q is over');
+            })
+
+
+
+       /*const promise = new Promise(function(resolve, reject) {
            setTimeout(function(){
                if(1) {
                   resolve('Hello promise!')
@@ -57,7 +87,7 @@
             .then(function(res) {
                 console.log(res);
             })
-            .then 
+            .then */
 
       /* const order = function(menuName, oncomplete) {
            console.log('start cooking food...');
