@@ -12,12 +12,36 @@
 </head>
 
 <body>
+
+    <ul></ul>
     
 
     <script>
         "use strict"
 
-       const menu = {
+        const ul = document.querySelector('ul');
+
+        function getSWShips() {
+            return fetch('https://swapi.dev/api/starships', {
+                method: 'GET'
+            });
+        }
+
+        getSWShips()
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                data.results.forEach(function(el) {
+                   const li = document.createElement('li');
+                   li.innerHTML = el.name;
+                   ul.append(li);
+                });
+            })
+
+
+
+       /*const menu = {
            burger: [
                 {
                     name: 'burg',
@@ -65,7 +89,7 @@
 
        order(menu.burger).then(function(res){
            console.log(res);
-       })
+       })*/
 
 
       /* function willGetNewPhone() {
