@@ -41,9 +41,34 @@
                }
            ]
        };
+       
+       const order = function(menu) {
+           console.log('start cooking...');
+
+           const cookFood = function(menuItem) {
+               
+               return new Promise(function(resolve, reject) {
+                    setTimeout(function() {
+                        if(1) {
+                            resolve(menuItem.name);
+                        } else {
+                            reject(menuItem.name)
+                        }
+
+                    }, menuItem.time)
+                  
+               })
+            };
+
+            return Promise.allSettled(menu.map(cookFood));
+       }    
+
+       order(menu.burger).then(function(res){
+           console.log(res);
+       })
 
 
-       function willGetNewPhone() {
+      /* function willGetNewPhone() {
            const resultGood = Math.floor(Math.random() * (12) + 1);
 
            return new Promise(function(resolve, reject) {
@@ -69,7 +94,7 @@
             }) 
             .finally(function() {
                 console.log('Q is over');
-            })
+            })*/
 
 
 
