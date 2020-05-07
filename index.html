@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>lesson_21</title>
     <style>
+        .showMore {
+            margin: 10px;
+            padding: 5px;
+        }
+        .ship {
+            cursor: pointer;
+        }
         
     </style>
 
@@ -13,31 +20,70 @@
 
 <body>
 
-    <ul></ul>
+    <ul class = 'ships'></ul>
+    <button class = 'showMore'>Show more</button>
     
 
     <script>
         "use strict"
 
-        const ul = document.querySelector('ul');
+        const ul = document.querySelector('.ships');
+        let currentLink = 'https://swapi.dev/api/starships';
 
-        function getSWShips() {
-            return fetch('https://swapi.dev/api/starships', {
-                method: 'GET'
-            });
+
+        getSWShips(currentLink);
+
+        function getSWShips(link) {
+            fetch(link)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    console.log(data);
+                    data.results.forEach(function(ship) {
+                        const $shipItem = document.createElement('li');
+                        $shipItem.classList.add('ship');
+                        $shipItem.innerHTML = ship.name;
+                        ul.append($shipItem);
+
+                        const subList = document.createElement('ul');
+
+                        $shipItem.append(subList);
+                        
+                        
+                        ship.films.forEach(function(film) {
+                            const $film = document.createElement('li');
+                            $film.innerHTML = film;
+                            subList.append($film);
+                        })
+
+                    });
+                    
+                    currentLink = data.next;
+
+                    document.querySelectorAll('.ship').forEach(function(ship) {
+                        ship.addEventListener('click', function(){
+                            console.log(ship.textContent);
+                         })
+                    })  
+
+
+                });
         }
 
-        getSWShips()
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(data) {
-                data.results.forEach(function(el) {
-                   const li = document.createElement('li');
-                   li.innerHTML = el.name;
-                   ul.append(li);
-                });
-            })
+
+         document.querySelector('.showMore').addEventListener('click', function() {
+             if(currentLink) {
+                getSWShips(currentLink);
+             }
+         })   
+
+         
+
+         
+            
+
+        /*function getSecond() */   
 
 
 
