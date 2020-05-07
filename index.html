@@ -13,6 +13,13 @@
         .ship {
             cursor: pointer;
         }
+        .films {
+           /* display: none;*/
+        }
+        .visible {
+            display: block;
+        }
+        
         
     </style>
 
@@ -46,30 +53,101 @@
                         $shipItem.innerHTML = ship.name;
                         ul.append($shipItem);
 
-                        const subList = document.createElement('ul');
+                        const $subList = document.createElement('ul');
+                        $subList.classList.add('films');
 
-                        $shipItem.append(subList);
-                        
-                        
-                        ship.films.forEach(function(film) {
-                            const $film = document.createElement('li');
-                            $film.innerHTML = film;
-                            subList.append($film);
+                        $shipItem.append($subList);
+
+                        const filmsProm = test(ship.films);
+
+                        filmsProm.then(function(films) {
+                            films.forEach(function(film) {
+                                const $film = document.createElement('li');
+                                $film.innerHTML = film.title;
+                                $subList.append($film);
+                            })
+                            
                         })
+
+                        document.querySelectorAll('.ship').forEach(function(ship) {
+                            ship.addEventListener('click', function(el){
+                                console.log(this.target);
+                                el.firstChild('.films').classList.toggle('visible');
+                            })
+                        })
+
+                      
+                        
+                        
+                        
+                        /*ship.films.forEach(function(film) {
+                            fetch(film)
+                            .then(function(response) {
+                                return response.json();
+                            })
+                            .then(function(data) {
+                                const $film = document.createElement('li');
+                                $film.innerHTML = data.title;
+                                subList.append($film);
+                            })
+                           
+                        })*/
 
                     });
                     
                     currentLink = data.next;
 
-                    document.querySelectorAll('.ship').forEach(function(ship) {
-                        ship.addEventListener('click', function(){
-                            console.log(ship.textContent);
-                         })
-                    })  
+                    
 
 
                 });
         }
+
+        function test(films) {
+            const filmsProm = films.map(function(film) {
+                            return fetch(film)
+                            .then(function(response) {
+                                return response.json();
+                            })
+                        })
+
+                        return Promise.all(filmsProm);
+
+        }
+        
+
+        
+
+        /*function test() {
+            
+            getFilmName('https://swapi.dev/api/films/')
+                .then(function(results){
+                    results.forEach(function(el) {
+                        filmsMap.push(el.title);
+                    })
+                })
+             
+        }*/
+
+        
+
+        
+
+        /*getFilmName('http://swapi.dev/api/films/1/')
+
+        
+
+        function getFilmName(link) {
+            return fetch(link)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                console.log(data.title);
+            })
+        }*/
+
+        
 
 
          document.querySelector('.showMore').addEventListener('click', function() {
