@@ -4,316 +4,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lesson_21</title>
-    <style>
-        .showMore {
-            margin: 10px;
-            padding: 5px;
-        }
-        .ship {
-            cursor: pointer;
-        }
-        .films {
-           /* display: none;*/
-        }
-        .visible {
-            display: block;
-        }
-        
-        
-    </style>
+    <title>lesson_23</title>
+   
 
 </head>
 
-<body>
-
-    <ul class = 'ships'></ul>
-    <button class = 'showMore'>Show more</button>
-    
+<body> 
 
     <script>
         "use strict"
-
-        const ul = document.querySelector('.ships');
-        let currentLink = 'https://swapi.dev/api/starships';
-
-
-        getSWShips(currentLink);
-
-        function getSWShips(link) {
-            fetch(link)
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(data) {
-                    console.log(data);
-                    data.results.forEach(function(ship) {
-                        const $shipItem = document.createElement('li');
-                        $shipItem.classList.add('ship');
-                        $shipItem.innerHTML = ship.name;
-                        ul.append($shipItem);
-
-                        const $subList = document.createElement('ul');
-                        $subList.classList.add('films');
-
-                        $shipItem.append($subList);
-
-                        const filmsProm = test(ship.films);
-
-                        filmsProm.then(function(films) {
-                            films.forEach(function(film) {
-                                const $film = document.createElement('li');
-                                $film.innerHTML = film.title;
-                                $subList.append($film);
-                            })
-                            
-                        })
-
-                        document.querySelectorAll('.ship').forEach(function(ship) {
-                            ship.addEventListener('click', function(el){
-                                console.log(this.target);
-                                el.firstChild('.films').classList.toggle('visible');
-                            })
-                        })
-
-                      
-                        
-                        
-                        
-                        /*ship.films.forEach(function(film) {
-                            fetch(film)
-                            .then(function(response) {
-                                return response.json();
-                            })
-                            .then(function(data) {
-                                const $film = document.createElement('li');
-                                $film.innerHTML = data.title;
-                                subList.append($film);
-                            })
-                           
-                        })*/
-
-                    });
-                    
-                    currentLink = data.next;
-
-                    
+        function Student(firstName, secondName, age, marks) {
+            this.firstName = firstName;
+            this.secondName = secondName;
+            this.age = age;
+            this.marks = marks;
+            this.isPresent = new Array(25);
+            this.count = 0;
+        }
 
 
+        Student.prototype = {
+            
+            present : function() {
+                if(this.count < this.isPresent.length) this.isPresent[this.count++] = true;
+            },
+            abent : function() {
+                if(this.count < this.isPresent.length) this.isPresent[this.count++] = false;
+            },
+
+            getAverageMarks : function() {
+                return this.marks.reduce((acc, current) => {
+                    return acc + current;
+                }) / this.marks.length;
+            },
+
+            getAge : function() {
+                return this.age;
+            },
+
+            getSummary : function() {
+                let lesson = 0;
+                let visit = 0;
+                this.isPresent.forEach(el => {
+                    if(el!==null) {
+                        lesson++;
+                        visit += el;
+                    }
                 });
-        }
-
-        function test(films) {
-            const filmsProm = films.map(function(film) {
-                            return fetch(film)
-                            .then(function(response) {
-                                return response.json();
-                            })
-                        })
-
-                        return Promise.all(filmsProm);
-
-        }
-        
-
-        
-
-        /*function test() {
-            
-            getFilmName('https://swapi.dev/api/films/')
-                .then(function(results){
-                    results.forEach(function(el) {
-                        filmsMap.push(el.title);
-                    })
-                })
-             
-        }*/
-
-        
-
-        
-
-        /*getFilmName('http://swapi.dev/api/films/1/')
-
-        
-
-        function getFilmName(link) {
-            return fetch(link)
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(data) {
-                console.log(data.title);
-            })
-        }*/
-
-        
-
-
-         document.querySelector('.showMore').addEventListener('click', function() {
-             if(currentLink) {
-                getSWShips(currentLink);
-             }
-         })   
-
-         
-
-         
-            
-
-        /*function getSecond() */   
-
-
-
-       /*const menu = {
-           burger: [
-                {
-                    name: 'burg',
-                    time: 2000
-                },
-                {
-                    name: 'potato',
-                    time: 1000
+                
+                let averageVisit = visit / lesson;
+                let averageMark = this.getAverageMarks();
+                if(averageVisit > 0.9 && averageMark > 90) {
+                    return 'Ути какой молодчинка!';
+                } else if (averageVisit > 0.9 || averageMark > 90) {
+                    return 'Норм, но можно лучше';
+                } else {
+                    return 'Редиска!';
                 }
-           ],
-           pizza: [
-               {
-                    name: 'piz',
-                    time: 2000
-               }
-           ],
-           hotDog: [
-               {
-                    name: 'hot',
-                    time: 1000
-               }
-           ]
-       };
-       
-       const order = function(menu) {
-           console.log('start cooking...');
-
-           const cookFood = function(menuItem) {
-               
-               return new Promise(function(resolve, reject) {
-                    setTimeout(function() {
-                        if(1) {
-                            resolve(menuItem.name);
-                        } else {
-                            reject(menuItem.name)
-                        }
-
-                    }, menuItem.time)
+            }
+        }
                   
-               })
-            };
 
-            return Promise.allSettled(menu.map(cookFood));
-       }    
+        let student1 = new Student('Vasya', 'Pupkin', 25, [90, 80, 7]);
+        let student2 = new Student('Olya', 'Ivanova', 22, [90, 95, 97]);
 
-       order(menu.burger).then(function(res){
-           console.log(res);
-       })*/
+        
+        student1.present();
+        student1.present();
+        student1.present();
+        student1.present();
+        student1.abent();
 
-
-      /* function willGetNewPhone() {
-           const resultGood = Math.floor(Math.random() * (12) + 1);
-
-           return new Promise(function(resolve, reject) {
-               if(resultGood > 8) {
-                   const phone = {
-                       brand: 'Apple',
-                       model: '11'
-                   }
-                   resolve(phone);
-               } else {
-                   const reason = new Error('You have bad markes');
-                   reject(reason);
-               }
-           })
-       }
-
-       willGetNewPhone()
-            .then(function(phone){
-                console.log(`Look at my ${phone.brand} ${phone.model}`);
-            })
-            .catch(function(reason) {
-                console.log(reason);
-            }) 
-            .finally(function() {
-                console.log('Q is over');
-            })*/
-
-
-
-       /*const promise = new Promise(function(resolve, reject) {
-           setTimeout(function(){
-               if(1) {
-                  resolve('Hello promise!')
-               } else {
-                  reject('Hello error:') 
-               }
-           }, 0) 
-       });
-
-       promise
-            .then(function(res) {
-                console.log(res);
-            })
-            .then */
-
-      /* const order = function(menuName, oncomplete) {
-           console.log('start cooking food...');
-
-           console.log('menuName', menuName);
-
-           const res = [];
-
-           function getResultData(data) {
-               res.push(data);
-               if(res.length === menuName.length) {
-                 oncomplete('finished: ', res);
-               }
-              
-           }
-
-           menuName.forEach(foodItem => {
-               cookFood(foodItem, getResultData);
-            });
-
-
-           function cookFood(food, callback){
-               const condition = true;
-
-               setTimeout(() => {
-                if(condition) {
-                   const cookResult = {
-                       value: food.name, 
-                       status: 'fulfild'
-                   }
-                   callback(cookResult);
-               } else {
-                  const cookResult = {
-                       value: food.name,
-                       status: 'rejected'
-                   }
-                   callback(cookResult);
-               }
-
-               }, food.time)    
-           }
-           
-       }
-
-       console.log(order(menu.burger, console.log));*/
-
-     
+        student2.present();
+        student2.present();
+        student2.present();
+        
+        console.log(student1.getSummary());
+        console.log(student1.getAge());
+        console.log(student2.getSummary());
+        console.log(student2.getAge());
 
 
 
         
-
-
 
 
     </script>
