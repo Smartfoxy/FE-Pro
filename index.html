@@ -1,99 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lesson_23</title>
-   
+    <title>Json</title>
+    <style>
+        button {
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .container {
+            margin: 10px;
+            border: 1px solid blue;
+            min-height: 30px;
+        }
+        form {
+            margin: 10px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        span {
+            margin-right: 30px;
+        }
 
+        
+    </style>
 </head>
+<body>
 
-<body> 
+    <form>
+        <input type="text" name="toDoItem" placeholder="What I have to do?">
+        <button type="submit">Save</button>
+    </form>
+    <div class="container"></div>
 
     <script>
-        "use strict"
-        function Student(firstName, secondName, age, marks) {
-            this.firstName = firstName;
-            this.secondName = secondName;
-            this.age = age;
-            this.marks = marks;
-            this.isPresent = new Array(25);
-            this.count = 0;
+        "use strict";
+
+        
+        if(localStorage.storedNotes) {
+            printToDoList(JSON.parse(localStorage.storedNotes));
         }
 
+        makeItDone(document.querySelectorAll('.plus'));
+        deleteItem(document.querySelectorAll('.minus'));
 
-        Student.prototype = {
 
-            constructor: Student,
-            
-            present : function() {
-                if(this.count < this.isPresent.length) this.isPresent[this.count++] = true;
-            },
-            abent : function() {
-                if(this.count < this.isPresent.length) this.isPresent[this.count++] = false;
-            },
 
-            getAverageMarks : function() {
-                return this.marks.reduce((acc, current) => {
-                    return acc + current;
-                }) / this.marks.length;
-            },
+        document.forms[0].addEventListener('submit', (e) => {
+            e.preventDefault();
 
-            getAge : function() {
-                return this.age;
-            },
+            const toDolist = localStorage.storedNotes ? JSON.parse(localStorage.storedNotes) : [];
+           
 
-            getSummary : function() {
-                let lesson = 0;
-                let visit = 0;
-                this.isPresent.forEach(el => {
-                    if(el!==null) {
-                        lesson++;
-                        visit += el;
+            const { target: {elements: {toDoItem: {value}}}} = e;
+            toDolist.push({
+                id: Date.now(),
+                value,
+                done: false
+            });
+
+           localStorage.storedNotes = JSON.stringify(toDolist);
+           printToDoList(toDolist);
+           
+            e.target.reset();  
+
+            makeItDone(document.querySelectorAll('.plus'));  
+            deleteItem(document.querySelectorAll('.minus'));
+        });
+
+        
+        function deleteItem(node) {
+            node.forEach(el => {
+                el.addEventListener('click', (e) => {
+                    
+                    let toDo =  JSON.parse(localStorage.storedNotes);
+                        
+                    let uselessItem = toDo.findIndex(function(el) {
+                            return (el.id == e.target.parentElement.id); //почему строгое равенство не срабатывает?
+                    });
+
+                    toDo.splice(uselessItem, 1);
+                   
+                    localStorage.storedNotes = JSON.stringify(toDo);
+                    
+
+                    printToDoList(toDo);
+                    makeItDone(document.querySelectorAll('.plus'));
+                    deleteItem(document.querySelectorAll('.minus'));
+                    
+                })
+            })
+        }    
+ 
+
+        function makeItDone(node) {
+            node.forEach(el => {
+                el.addEventListener('click', (e) => {
+                    
+                    let toDo =  JSON.parse(localStorage.storedNotes);
+                        
+                    let currentItem = toDo.find(function(el) {
+                            return (el.id == e.target.parentElement.id); //почему строгое равенство не срабатывает?
+                    });
+                    
+                    currentItem.done = !currentItem.done;
+
+                    localStorage.storedNotes = JSON.stringify(toDo);
+
+                    if(currentItem.done) {
+                        document.getElementById(currentItem.id).firstElementChild.innerHTML = currentItem.value.strike();
+                    } else {
+                        document.getElementById(currentItem.id).firstElementChild.innerHTML = currentItem.value;
                     }
-                });
-                
-                let averageVisit = visit / lesson;
-                let averageMark = this.getAverageMarks();
-                if(averageVisit > 0.9 && averageMark > 90) {
-                    return 'Ути какой молодчинка!';
-                } else if (averageVisit > 0.9 || averageMark > 90) {
-                    return 'Норм, но можно лучше';
-                } else {
-                    return 'Редиска!';
-                }
-            }
+                })
+            })
+        } 
+
+
+         //   ЧТО не правильно сделала? пыталась сделать деструктуризацию на строке "ВОТ ЗДЕСЬ" но так не работает???
+
+       /* function makeItDone(node) {
+            node.forEach(el => {
+                el.addEventListener('click', (e) => {
+                    
+                    let toDo =  JSON.parse(localStorage.storedNotes);
+                        
+                    let {id, value, done} = toDo.find(function(el) {      "ВОТ ЗДЕСЬ"
+                            return (el.id == e.target.parentElement.id); 
+                    });
+                    
+                    done = !done;
+
+                    localStorage.storedNotes = JSON.stringify(toDo);
+
+                    if(done) {
+                        document.getElementById(id).firstElementChild.innerHTML = value.strike();
+                    } else {
+                        document.getElementById(id).firstElementChild.innerHTML = value;
+                    }
+                })
+            })
+        } */
+ 
+
+        function printToDoList(list) {
+            let inner = '<ul>';
+
+            list.forEach(({id, value, done} = item) => {
+                if(done) value = value.strike();
+                inner += `<li id = '${id}'><span>${value}</span><button class = 'plus'>+</button><button class = 'minus'>-</button></li>`;
+            });
+
+            inner += '</ul>';
+
+            document.querySelector('.container').innerHTML = inner; 
         }
 
-        Student.prototype.constructor = Student;
-                  
-
-        let student1 = new Student('Vasya', 'Pupkin', 25, [90, 80, 7]);
-        let student2 = new Student('Olya', 'Ivanova', 22, [90, 95, 97]);
-
-        
-        student1.present();
-        student1.present();
-        student1.present();
-        student1.present();
-        student1.abent();
-
-        student2.present();
-        student2.present();
-        student2.present();
-        
-        console.log(student1.getSummary());
-        console.log(student1.getAge());
-        console.log(student2.getSummary());
-        console.log(student2.getAge());
-
-
-
-        
+      
 
 
     </script>
+    
 </body>
-
 </html>
