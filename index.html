@@ -24,6 +24,8 @@
 
 
         Student.prototype = {
+
+            constructor: Student,
             
             present : function() {
                 if(this.count < this.isPresent.length) this.isPresent[this.count++] = true;
@@ -63,6 +65,8 @@
                 }
             }
         }
+
+        Student.prototype.constructor = Student;
                   
 
         let student1 = new Student('Vasya', 'Pupkin', 25, [90, 80, 7]);
