@@ -4,8 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lesson_21</title>
+    <title>promise</title>
     <style>
+        .showMore {
+            margin: 10px;
+            padding: 5px;
+        }
+        .ship {
+            cursor: pointer;
+        }
+        .films {
+           display: block;
+        }
+        .invisible {
+            display: none;
+        }
+        
         
     </style>
 
@@ -13,186 +27,120 @@
 
 <body>
 
-    <ul></ul>
+    <ul class = 'ships'></ul>
+    <button class = 'showMore'>Show more</button>
     
 
     <script>
         "use strict"
 
-        const ul = document.querySelector('ul');
-
-        function getSWShips() {
-            return fetch('https://swapi.dev/api/starships', {
-                method: 'GET'
-            });
-        }
-
-        getSWShips()
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(data) {
-                data.results.forEach(function(el) {
-                   const li = document.createElement('li');
-                   li.innerHTML = el.name;
-                   ul.append(li);
-                });
-            })
-
-
-
-       /*const menu = {
-           burger: [
-                {
-                    name: 'burg',
-                    time: 2000
-                },
-                {
-                    name: 'potato',
-                    time: 1000
-                }
-           ],
-           pizza: [
-               {
-                    name: 'piz',
-                    time: 2000
-               }
-           ],
-           hotDog: [
-               {
-                    name: 'hot',
-                    time: 1000
-               }
-           ]
-       };
-       
-       const order = function(menu) {
-           console.log('start cooking...');
-
-           const cookFood = function(menuItem) {
-               
-               return new Promise(function(resolve, reject) {
-                    setTimeout(function() {
-                        if(1) {
-                            resolve(menuItem.name);
-                        } else {
-                            reject(menuItem.name)
-                        }
-
-                    }, menuItem.time)
-                  
-               })
-            };
-
-            return Promise.allSettled(menu.map(cookFood));
-       }    
-
-       order(menu.burger).then(function(res){
-           console.log(res);
-       })*/
-
-
-      /* function willGetNewPhone() {
-           const resultGood = Math.floor(Math.random() * (12) + 1);
-
-           return new Promise(function(resolve, reject) {
-               if(resultGood > 8) {
-                   const phone = {
-                       brand: 'Apple',
-                       model: '11'
-                   }
-                   resolve(phone);
-               } else {
-                   const reason = new Error('You have bad markes');
-                   reject(reason);
-               }
-           })
-       }
-
-       willGetNewPhone()
-            .then(function(phone){
-                console.log(`Look at my ${phone.brand} ${phone.model}`);
-            })
-            .catch(function(reason) {
-                console.log(reason);
-            }) 
-            .finally(function() {
-                console.log('Q is over');
-            })*/
-
-
-
-       /*const promise = new Promise(function(resolve, reject) {
-           setTimeout(function(){
-               if(1) {
-                  resolve('Hello promise!')
-               } else {
-                  reject('Hello error:') 
-               }
-           }, 0) 
-       });
-
-       promise
-            .then(function(res) {
-                console.log(res);
-            })
-            .then */
-
-      /* const order = function(menuName, oncomplete) {
-           console.log('start cooking food...');
-
-           console.log('menuName', menuName);
-
-           const res = [];
-
-           function getResultData(data) {
-               res.push(data);
-               if(res.length === menuName.length) {
-                 oncomplete('finished: ', res);
-               }
-              
-           }
-
-           menuName.forEach(foodItem => {
-               cookFood(foodItem, getResultData);
-            });
-
-
-           function cookFood(food, callback){
-               const condition = true;
-
-               setTimeout(() => {
-                if(condition) {
-                   const cookResult = {
-                       value: food.name, 
-                       status: 'fulfild'
-                   }
-                   callback(cookResult);
-               } else {
-                  const cookResult = {
-                       value: food.name,
-                       status: 'rejected'
-                   }
-                   callback(cookResult);
-               }
-
-               }, food.time)    
-           }
-           
-       }
-
-       console.log(order(menu.burger, console.log));*/
-
-     
-
-
-
+        const $shipsList = document.querySelector('.ships');
+        let currentLinkShips = 'https://swapi.dev/api/starships';
+        let linkFilms = 'https://swapi.dev/api/films/';
+        const $showMore = document.querySelector('.showMore');
         
 
+        loadShips(getSWShips(currentLinkShips));
 
+        $showMore.addEventListener('click', function() {
+             if(currentLinkShips) {
+                loadShips(getSWShips(currentLinkShips));
+             }
+        })
+
+        function loadShips(ships) { 
+            ships.then(function(ships){
+                let shipTitles = ships.map(ship =>{
+                    return ship.title;
+                })
+               
+                shipTitles.forEach(item => {
+                    const $item = document.createElement('li');
+                    $item.classList.add('ship');
+                    $item.innerHTML = item;
+                    $shipsList.append($item);
+                
+                
+                    $item.addEventListener('click', function(ship) {
+
+                        if(!$item.firstElementChild) {
+                            
+                            let filmsUrlarr = ships.find(ship => {
+                                return ship.title === $item.firstChild.textContent;
+                            }).filmsUrl;
+
+                            let filmsArr = filmsUrlarr.map(url => {
+                                return getSWFilmTitle(url);
+                            })
+                            Promise.all([ships, filmsArr])
+                            .then(data => {
+                                let $filmList = createFilmList(data[1]);
+                                $item.append($filmList);
+                            })
+                        } else {
+                            $item.querySelector('.films').classList.toggle('invisible');
+                        }
+                    })
+                })
+            })
+        }  
+
+        function createFilmList(filmsArr) {
+            const $filmList = document.createElement('ul');
+            $filmList.classList.add('films');
+
+            Promise.all(filmsArr)
+                .then(filmsArr => {
+                    fillList($filmList, filmsArr, 'film');
+                })
+            
+            return $filmList;
+        }    
+
+        function fillList($list, itemsArray, itemClass) {
+            itemsArray.forEach(item => {
+                const $item = document.createElement('li');
+                $item.classList.add(itemClass);
+                $item.innerHTML = item;
+                $list.append($item);
+            })
+        } 
+
+        function getSWShips(link) {
+            return fetch(link)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    let ships = [];
+
+                    data.results.forEach(ship => {
+                        ships.push(
+                            {
+                            'title': ship.name,
+                            'filmsUrl': ship.films
+                            }
+                        );
+                    });
+
+                    currentLinkShips = data.next;
+                    if(!currentLinkShips) $showMore.disabled = true;
+                    return ships;
+                })
+        }
+
+        function getSWFilmTitle(link) {
+            return fetch(link)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    return data.title; 
+                })
+        }
 
 
     </script>
 </body>
 
-</html>
+</html> 
